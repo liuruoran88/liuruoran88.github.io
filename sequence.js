@@ -1094,7 +1094,7 @@ var reload = exports.reload = function () {
                 switch (_context7.prev = _context7.next) {
                     case 0:
                         return _context7.abrupt('return', new _promise2.default(function () {
-                            location.href = location.href.replace(/\/sequence.html(.*)$/, '/sequence.html?v=' + Date.now());
+                            location.href = location.href.replace(/\/sequence.html(.*)?$/, '/sequence.html?v=' + Date.now());
                             // location.reload();
                         }));
 
