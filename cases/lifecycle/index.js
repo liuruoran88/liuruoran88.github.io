@@ -4632,11 +4632,11 @@ exports.default = function (scope) {
 
                             case 32:
                                 scores = _context2.sent;
-                                lifecycleScore = scores.reduce(function (a, b) {
+                                lifecycleScore = (scores.reduce(function (a, b) {
                                     return a + b;
-                                }, 0) / (CHECK_LIST.length - 1);
+                                }, 0) / (CHECK_LIST.length - 1)).toFixed(2);
                                 _context2.next = 36;
-                                return (0, _helper.grade)('lifecycle', lifecycleScore);
+                                return (0, _helper.grade)('lifecycle', Number(lifecycleScore));
 
                             case 36:
 

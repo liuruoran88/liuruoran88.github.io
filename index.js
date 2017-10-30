@@ -8571,7 +8571,7 @@ function refreshFeatureScore(list) {
                         case 2:
                             score = _context.sent;
 
-                            // log('++++++++++++', item, score);
+                            // log('1111++++++++++++', item, score, totalTestScore);
                             score = score || 0;
                             totalTestScore += score;
                             summary.feature[item] = score;

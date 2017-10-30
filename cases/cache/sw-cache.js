@@ -7852,7 +7852,7 @@ self.addEventListener('install', function (event) {
 
     /* eslint-disable fecs-max-statements */
     event.waitUntil((0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
-        var value, cache1, hasCaches1, hasCachesKeys, hasCaches2, urlAdd, matchCaches, matchCachesData, matchCache, matchCacheData, urlPut, resPut, urlAddAll, cacheKeys, matchAllCache;
+        var value, cache1, hasCaches1, hasCachesKeys, hasCaches2, urlPut, resPut, matchCache, matchCacheData, matchCaches, matchCachesData, urlAddAll, cacheKeys, urlAdd, matchAllCache;
         return _regenerator2.default.wrap(function _callee$(_context) {
             while (1) {
                 switch (_context.prev = _context.next) {
@@ -7919,77 +7919,76 @@ self.addEventListener('install', function (event) {
                     case 30:
                         (0, _log.log)('- caches delete done -', value);
 
-                        // cache.add
-                        urlAdd = baseUrl + 'add';
+                        // cache.put
+                        urlPut = baseUrl + 'put';
                         _context.next = 34;
-                        return cache1.add(urlAdd);
+                        return fetch(urlPut);
 
                     case 34:
-                        _context.next = 36;
-                        return _store.featureStore.setItem('cache.add', 0.5);
+                        resPut = _context.sent;
+                        _context.next = 37;
+                        return cache1.put(urlPut, resPut);
 
-                    case 36:
-                        _context.next = 38;
-                        return caches.match(urlAdd, {
+                    case 37:
+                        _context.next = 39;
+                        return _store.featureStore.setItem('cache.put', 0.5);
+
+                    case 39:
+                        _context.next = 41;
+                        return cache1.match(urlPut);
+
+                    case 41:
+                        matchCache = _context.sent;
+                        _context.next = 44;
+                        return matchCache.json();
+
+                    case 44:
+                        matchCacheData = _context.sent;
+
+                        value = Number(matchCacheData.data === urlPut);
+                        _context.next = 48;
+                        return _store.featureStore.setItem('cache.put', value);
+
+                    case 48:
+                        (0, _log.log)('- cache put done -', value);
+
+                        // caches.match
+                        _context.prev = 49;
+                        _context.next = 52;
+                        return caches.match(urlPut, {
                             cacheName: 'caches-1'
                         });
 
-                    case 38:
+                    case 52:
                         matchCaches = _context.sent;
-                        _context.next = 41;
+                        _context.next = 55;
                         return matchCaches.json();
 
-                    case 41:
+                    case 55:
                         matchCachesData = _context.sent;
 
-                        value = Number(matchCachesData.data === urlAdd);
-                        _context.next = 45;
-                        return _store.featureStore.setItem('cache.add', value);
-
-                    case 45:
-                        _context.next = 47;
-                        return _store.featureStore.setItem('caches.match', value);
-
-                    case 47:
-                        (0, _log.log)('- caches match done -', value);
-
-                        // cache.match
-                        _context.next = 50;
-                        return cache1.match(urlAdd);
-
-                    case 50:
-                        matchCache = _context.sent;
-                        _context.next = 53;
-                        return matchCache.json();
-
-                    case 53:
-                        matchCacheData = _context.sent;
-
-                        value = Number(matchCacheData.data === urlAdd);
-                        _context.next = 57;
-                        return _store.featureStore.setItem('cache.add', value);
-
-                    case 57:
+                        value = Number(matchCachesData.data === urlPut);
                         _context.next = 59;
-                        return _store.featureStore.setItem('cache.match', value);
+                        return _store.featureStore.setItem('cache.add', value);
 
                     case 59:
-                        (0, _log.log)('- cache add done -', value);
-                        (0, _log.log)('- cache match done -', value);
+                        _context.next = 61;
+                        return _store.featureStore.setItem('caches.match', value);
 
-                        // cache.put
-                        urlPut = baseUrl + 'put';
-                        _context.next = 64;
-                        return fetch(urlPut);
+                    case 61:
+                        (0, _log.log)('- caches match done -', value);
+                        _context.next = 67;
+                        break;
 
                     case 64:
-                        resPut = _context.sent;
-                        _context.next = 67;
-                        return cache1.put(urlPut, resPut);
+                        _context.prev = 64;
+                        _context.t0 = _context['catch'](49);
+
+                        (0, _log.log)('caches.match error', _context.t0);
 
                     case 67:
                         _context.next = 69;
-                        return _store.featureStore.setItem('cache.put', 0.5);
+                        return cache1.delete(urlPut);
 
                     case 69:
                         _context.next = 71;
@@ -7997,106 +7996,104 @@ self.addEventListener('install', function (event) {
 
                     case 71:
                         matchCache = _context.sent;
-                        _context.next = 74;
-                        return matchCache.json();
-
-                    case 74:
-                        matchCacheData = _context.sent;
-
-                        value = Number(matchCacheData.data === urlPut);
-                        _context.next = 78;
-                        return _store.featureStore.setItem('cache.put', value);
-
-                    case 78:
-                        (0, _log.log)('- cache put done -', value);
-
-                        // cache.delete
-                        _context.next = 81;
-                        return cache1.delete(urlPut);
-
-                    case 81:
-                        _context.next = 83;
-                        return cache1.match(urlPut);
-
-                    case 83:
-                        matchCache = _context.sent;
 
                         value = Number(!matchCache);
-                        _context.next = 87;
+                        _context.next = 75;
                         return _store.featureStore.setItem('cache.delete', value);
 
-                    case 87:
+                    case 75:
                         (0, _log.log)('- cache delete done -', value);
 
                         // cache.addAll
                         urlAddAll = [baseUrl + '1', baseUrl + '2', baseUrl + '3', baseUrl + '4'];
-                        _context.next = 91;
+                        _context.next = 79;
                         return cache1.addAll(urlAddAll);
 
-                    case 91:
-                        _context.next = 93;
+                    case 79:
+                        _context.next = 81;
                         return _store.featureStore.setItem('cache.addAll', 0.5);
 
-                    case 93:
-                        _context.next = 95;
+                    case 81:
+                        _context.next = 83;
                         return cache1.keys();
 
-                    case 95:
+                    case 83:
                         cacheKeys = _context.sent;
 
                         value = Number(cacheKeys && cacheKeys.length >= 4);
-                        _context.next = 99;
+                        _context.next = 87;
                         return _store.featureStore.setItem('cache.addAll', value);
 
-                    case 99:
+                    case 87:
                         (0, _log.log)('- cache addAll done -', value, cacheKeys);
 
                         value = Number(cacheKeys && cacheKeys.length >= 2);
-                        _context.next = 103;
+                        _context.next = 91;
                         return _store.featureStore.setItem('cache.keys', value);
 
-                    case 103:
+                    case 91:
                         (0, _log.log)('- cache keys done -', value, cacheKeys);
 
-                        // cache.matchAll
+                        // cache.add
+                        urlAdd = baseUrl + 'add';
+                        _context.next = 95;
+                        return cache1.add(urlAdd);
+
+                    case 95:
+                        _context.next = 97;
+                        return _store.featureStore.setItem('cache.add', 0.5);
+
+                    case 97:
+                        _context.next = 99;
+                        return cache1.match(urlAdd);
+
+                    case 99:
+                        matchCache = _context.sent;
+                        _context.next = 102;
+                        return matchCache.json();
+
+                    case 102:
+                        matchCacheData = _context.sent;
+
+                        value = Number(matchCacheData.data === urlAdd);
                         _context.next = 106;
-                        return cache1.matchAll(baseUrl);
+                        return _store.featureStore.setItem('cache.add', value);
 
                     case 106:
+                        _context.next = 108;
+                        return _store.featureStore.setItem('cache.match', value);
+
+                    case 108:
+                        (0, _log.log)('- cache add done -', value);
+                        (0, _log.log)('- cache match done -', value);
+
+                        // cache.matchAll
+                        _context.next = 112;
+                        return cache1.matchAll(baseUrl);
+
+                    case 112:
                         matchAllCache = _context.sent;
 
                         value = Number(matchAllCache && matchAllCache.length >= 4);
-                        _context.next = 110;
+                        _context.next = 116;
                         return _store.featureStore.setItem('cache.matchAll', value);
 
-                    case 110:
+                    case 116:
                         (0, _log.log)('- cache matchAll done -', value, matchAllCache);
 
-                        // cache.put
-                        // const urlPut = '/cache/' + 'put';
-                        // const resPut = await fetch(urlPut);
-                        // await cache1.put(urlPut, resPut);
-                        // await featureStore.setItem('cache.put', 0.5);
-
-                        // matchCache = await cache1.match(urlPut);
-                        // matchCacheData = await matchCache.json();
-                        // value = Number(matchCacheData.data === urlPut);
-                        // await featureStore.setItem('cache.put', value);
-                        // log('- cache put done -', value);
-
                         // delete test cache
-                        _context.next = 113;
+                        _context.next = 119;
                         return caches.delete('caches-1');
 
-                    case 113:
+                    case 119:
                         (0, _log.log)('- cache test done -');
 
-                    case 114:
+                    case 120:
                     case 'end':
                         return _context.stop();
                 }
             }
-        }, _callee, _this);
+        }, _callee, _this, [[49, 64]]);
     }))());
     /* eslint-enable */
 
