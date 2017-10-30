@@ -9800,7 +9800,7 @@ var featureKeys = exports.featureKeys = {
     // 'cache.matchAll',
     'cache.put'],
     sync: ['syncEvent'],
-    postmessage: ['clients.matchAll', 'sw-msg-send', 'sw-msg-got', 'main-msg-send', 'main-msg-got'],
+    postmessage: ['postMessage', 'clients.matchAll', 'sw-msg-send', 'sw-msg-got', 'main-msg-send', 'main-msg-got'],
     // getregistration: [
     //     'navigator.serviceWorker.getRegistration',
     //     'navigator.serviceWorker.getRegistrations'

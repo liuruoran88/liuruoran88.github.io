@@ -11975,7 +11975,7 @@ var featureKeys = exports.featureKeys = {
     // 'cache.matchAll',
     'cache.put'],
     sync: ['syncEvent'],
-    postmessage: ['clients.matchAll', 'sw-msg-send', 'sw-msg-got', 'main-msg-send', 'main-msg-got'],
+    postmessage: ['postMessage', 'clients.matchAll', 'sw-msg-send', 'sw-msg-got', 'main-msg-send', 'main-msg-got'],
     // getregistration: [
     //     'navigator.serviceWorker.getRegistration',
     //     'navigator.serviceWorker.getRegistrations'
@@ -13079,7 +13079,7 @@ exports.default = function (scope) {
             var _this = this;
 
             return (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
-                var messageWaiter, reg;
+                var messageWaiter, reg, point, processItem, i, score, result;
                 return _regenerator2.default.wrap(function _callee$(_context) {
                     while (1) {
                         switch (_context.prev = _context.next) {
@@ -13143,17 +13143,50 @@ exports.default = function (scope) {
                                 return _promise2.default.race([messageWaiter, (0, _helper.sleep)(3000)]);
 
                             case 26:
-                                _context.next = 28;
+
+                                // postmessage score
+                                point = 0;
+                                processItem = ['sw-msg-send', 'sw-msg-got', 'main-msg-send', 'main-msg-got'];
+                                i = 0;
+
+                            case 29:
+                                if (!(i < processItem.length)) {
+                                    _context.next = 37;
+                                    break;
+                                }
+
+                                _context.next = 32;
+                                return _store.featureStore.getItem(processItem[i]);
+
+                            case 32:
+                                score = _context.sent;
+
+                                point += score;
+
+                            case 34:
+                                i++;
+                                _context.next = 29;
+                                break;
+
+                            case 37:
+                                result = Number((point / processItem.length).toFixed(2));
+                                _context.next = 40;
+                                return _store.featureStore.setItem('postMessage', result);
+
+                            case 40:
+                                (0, _log.log)('- postmessage -', result);
+
+                                _context.next = 43;
                                 return (0, _helper.sleep)(5000);
 
-                            case 28:
-                                _context.next = 30;
+                            case 43:
+                                _context.next = 45;
                                 return reg.unregister();
 
-                            case 30:
+                            case 45:
                                 (0, _log.log)('postmessage: test finish');
 
-                            case 31:
+                            case 46:
                             case 'end':
                                 return _context.stop();
                         }
@@ -13172,10 +13205,10 @@ var _log = __webpack_require__(63);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var CHECK_LIST = ['clients.matchAll', 'sw-msg-send', 'sw-msg-got', 'main-msg-send', 'main-msg-got']; /**
-                                                                                                      * @file postmessage-test
-                                                                                                      * @author ruoran (liuruoran@baidu.com)
-                                                                                                      */
+var CHECK_LIST = ['postMessage', 'clients.matchAll', 'sw-msg-send', 'sw-msg-got', 'main-msg-send', 'main-msg-got']; /**
+                                                                                                                     * @file postmessage-test
+                                                                                                                     * @author ruoran (liuruoran@baidu.com)
+                                                                                                                     */
 
 var ch = void 0;
 
