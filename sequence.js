@@ -1094,8 +1094,7 @@ var reload = exports.reload = function () {
                 switch (_context7.prev = _context7.next) {
                     case 0:
                         return _context7.abrupt('return', new _promise2.default(function () {
-                            location.href = location.href.replace(/\/sequence\.html.*$/, '/sequence.html?v=' + Date.now());
-                            // location.reload();
+                            location.reload();
                         }));
 
                     case 1:
@@ -13144,50 +13143,52 @@ exports.default = function (scope) {
                                 return _promise2.default.race([messageWaiter, (0, _helper.sleep)(3000)]);
 
                             case 26:
+                                _context.next = 28;
+                                return (0, _helper.sleep)(3000);
 
-                                // postmessage score
+                            case 28:
                                 point = 0;
                                 processItem = ['sw-msg-send', 'sw-msg-got', 'main-msg-send', 'main-msg-got'];
                                 i = 0;
 
-                            case 29:
+                            case 31:
                                 if (!(i < processItem.length)) {
-                                    _context.next = 37;
+                                    _context.next = 39;
                                     break;
                                 }
 
-                                _context.next = 32;
+                                _context.next = 34;
                                 return _store.featureStore.getItem(processItem[i]);
 
-                            case 32:
+                            case 34:
                                 score = _context.sent;
 
                                 point += score;
 
-                            case 34:
+                            case 36:
                                 i++;
-                                _context.next = 29;
+                                _context.next = 31;
                                 break;
 
-                            case 37:
+                            case 39:
                                 result = Number((point / processItem.length).toFixed(2));
-                                _context.next = 40;
+                                _context.next = 42;
                                 return _store.featureStore.setItem('postMessage', result);
 
-                            case 40:
+                            case 42:
                                 (0, _log.log)('- postmessage -', result);
 
-                                _context.next = 43;
+                                _context.next = 45;
                                 return (0, _helper.sleep)(5000);
 
-                            case 43:
-                                _context.next = 45;
+                            case 45:
+                                _context.next = 47;
                                 return reg.unregister();
 
-                            case 45:
+                            case 47:
                                 (0, _log.log)('postmessage: test finish');
 
-                            case 46:
+                            case 48:
                             case 'end':
                                 return _context.stop();
                         }
