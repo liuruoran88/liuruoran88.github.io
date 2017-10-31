@@ -7876,7 +7876,7 @@ self.addEventListener('install', function (event) {
         _store.featureStore.setItem('caches', 1);
     }
 
-    var baseUrl = '/cache/';
+    var baseUrl = "/pwa-test" + '/cache/';
 
     /* eslint-disable fecs-max-statements */
     event.waitUntil((0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
