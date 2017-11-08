@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 523);
+/******/ 	return __webpack_require__(__webpack_require__.s = 515);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -3564,7 +3564,7 @@ module.exports = Object.keys || function keys(O) {
 
 /***/ }),
 
-/***/ 220:
+/***/ 223:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3578,255 +3578,80 @@ var _regenerator = __webpack_require__(23);
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
 
-var _promise = __webpack_require__(43);
-
-var _promise2 = _interopRequireDefault(_promise);
-
 var _asyncToGenerator2 = __webpack_require__(24);
 
 var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
-var messageFromSWListener = function () {
-    var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee6() {
-        var _this2 = this;
-
-        return _regenerator2.default.wrap(function _callee6$(_context6) {
-            while (1) {
-                switch (_context6.prev = _context6.next) {
-                    case 0:
-
-                        // support MessageChannel
-                        if (window.MessageChannel) {
-                            // set up a message channel to communicate with the SW
-                            ch = new MessageChannel();
-                            ch.port1.onmessage = function () {
-                                var _ref2 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2(event) {
-                                    return _regenerator2.default.wrap(function _callee2$(_context2) {
-                                        while (1) {
-                                            switch (_context2.prev = _context2.next) {
-                                                case 0:
-                                                    (0, _log.log)('Got reply from sw via ch.port2', event.data);
-                                                    _context2.next = 3;
-                                                    return _store.featureStore.setItem('main-msg-got', 0.8);
-
-                                                case 3:
-                                                    (0, _log.log)('- main-msg-got done -', 0.8);
-                                                    // await store.put('feature', 'messageChannel.port1', 'main-msg-got-by')
-
-                                                case 4:
-                                                case 'end':
-                                                    return _context2.stop();
-                                            }
-                                        }
-                                    }, _callee2, _this2);
-                                }));
-
-                                return function (_x) {
-                                    return _ref2.apply(this, arguments);
-                                };
-                            }();
-                        }
-
-                        // window, sw
-                        return _context6.abrupt('return', _promise2.default.race([(0, _helper.one)(window, 'error', function () {
-                            var _ref3 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee3(error) {
-                                return _regenerator2.default.wrap(function _callee3$(_context3) {
-                                    while (1) {
-                                        switch (_context3.prev = _context3.next) {
-                                            case 0:
-                                                console.error(error);
-                                                _context3.next = 3;
-                                                return _store.featureStore.setItem('main-msg-got', 0);
-
-                                            case 3:
-                                                (0, _log.log)('- main-msg-send done -', 0);
-
-                                            case 4:
-                                            case 'end':
-                                                return _context3.stop();
-                                        }
-                                    }
-                                }, _callee3, _this2);
-                            }));
-
-                            return function (_x2) {
-                                return _ref3.apply(this, arguments);
-                            };
-                        }()), (0, _helper.one)(window, 'message', function () {
-                            var _ref4 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee4(event) {
-                                return _regenerator2.default.wrap(function _callee4$(_context4) {
-                                    while (1) {
-                                        switch (_context4.prev = _context4.next) {
-                                            case 0:
-                                                console.warn('Got reply from serviceWorker via window', event.data);
-                                                _context4.next = 3;
-                                                return _store.featureStore.setItem('main-msg-got', 0.5);
-
-                                            case 3:
-                                                (0, _log.log)('- main-msg-got done -', 0.5);
-                                                // await store.put('feature', 'window', 'main-msg-got-by')
-
-                                            case 4:
-                                            case 'end':
-                                                return _context4.stop();
-                                        }
-                                    }
-                                }, _callee4, _this2);
-                            }));
-
-                            return function (_x3) {
-                                return _ref4.apply(this, arguments);
-                            };
-                        }()), (0, _helper.one)(navigator.serviceWorker, 'message', function () {
-                            var _ref5 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee5(event) {
-                                return _regenerator2.default.wrap(function _callee5$(_context5) {
-                                    while (1) {
-                                        switch (_context5.prev = _context5.next) {
-                                            case 0:
-                                                (0, _log.log)('Got reply from serviceWorker via navigator.serviceWorker', event);
-                                                _context5.next = 3;
-                                                return _store.featureStore.setItem('main-msg-got', 1);
-
-                                            case 3:
-                                                (0, _log.log)('- main-msg-got done -', 1);
-                                                // await store.put('feature', 'navigator.serviceWorker', 'main-msg-got-by')
-
-                                            case 4:
-                                            case 'end':
-                                                return _context5.stop();
-                                        }
-                                    }
-                                }, _callee5, _this2);
-                            }));
-
-                            return function (_x4) {
-                                return _ref5.apply(this, arguments);
-                            };
-                        }())]));
-
-                    case 2:
-                    case 'end':
-                        return _context6.stop();
-                }
-            }
-        }, _callee6, this);
-    }));
-
-    return function messageFromSWListener() {
-        return _ref.apply(this, arguments);
-    };
-}();
-
 exports.default = function (scope) {
     return {
-        name: 'postmessage',
+        name: 'client',
         scope: scope,
-        features: CHECK_LIST,
+        features: ['clients', 'clients.get', 'clients.matchAll',
+        // 'clients.openWindow',
+        'clients.claim'
+        // ,
+        // 'client.focus',
+        // 'client.navigate'
+        ],
         main: function main() {
             var _this = this;
 
             return (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
-                var messageWaiter, reg;
+                var reg;
                 return _regenerator2.default.wrap(function _callee$(_context) {
                     while (1) {
                         switch (_context.prev = _context.next) {
                             case 0:
+                                (0, _log.log)('client: start');
 
-                                (0, _log.log)('<< postMessage test >>');
-
-                                // sw support
-
-                                if (navigator.serviceWorker) {
-                                    _context.next = 3;
-                                    break;
-                                }
-
-                                return _context.abrupt('return');
+                                _context.next = 3;
+                                return (0, _helper.register)(scope + 'sw-client.js', scope);
 
                             case 3:
-                                messageWaiter = messageFromSWListener();
-
-                                (0, _log.log)('sw-postmessage register');
-                                _context.next = 7;
-                                return navigator.serviceWorker.register(scope + 'sw-postmessage.js', { scope: scope });
-
-                            case 7:
                                 reg = _context.sent;
-                                _context.next = 10;
-                                return (0, _helper.sleep)(3000);
 
-                            case 10:
-                                _context.prev = 10;
 
-                                reg.active.postMessage({
-                                    text: 'Hi!',
-                                    port: ch && ch.port2
-                                }, [ch && ch.port2]);
-                                _context.next = 14;
-                                return _store.featureStore.setItem('main-msg-send', 1);
+                                (0, _log.log)('client: sleep for 5s');
 
-                            case 14:
-                                (0, _log.log)('- main-msg-send done -', 1);
-                                _context.next = 24;
-                                break;
-
-                            case 17:
-                                _context.prev = 17;
-                                _context.t0 = _context['catch'](10);
-
-                                console.error(_context.t0);
-                                // getting a cloning error in Firefox
-                                reg.active.postMessage({
-                                    text: 'Hi!'
-                                });
-                                _context.next = 23;
-                                return _store.featureStore.setItem('main-msg-send', 0.5);
-
-                            case 23:
-                                (0, _log.log)('- main-msg-send done -', 0.5);
-
-                            case 24:
-                                _context.next = 26;
-                                return _promise2.default.race([messageWaiter, (0, _helper.sleep)(3000)]);
-
-                            case 26:
-                                _context.next = 28;
+                                _context.next = 7;
                                 return (0, _helper.sleep)(5000);
 
-                            case 28:
-                                _context.next = 30;
+                            case 7:
+
+                                if (navigator.serviceWorker.controller) {
+                                    if (navigator.serviceWorker.controller.state === 'activated') {
+                                        (0, _helper.grade)('clients.claim', 1);
+                                        (0, _log.log)('client: clients.claim works');
+                                    }
+                                }
+
+                                _context.next = 10;
                                 return reg.unregister();
 
-                            case 30:
-                                (0, _log.log)('postmessage: test finish');
+                            case 10:
 
-                            case 31:
+                                (0, _log.log)('client: test finish');
+
+                            case 11:
                             case 'end':
                                 return _context.stop();
                         }
                     }
-                }, _callee, _this, [[10, 17]]);
+                }, _callee, _this);
             }))();
+        },
+        error: function error(e) {
+            (0, _log.log)('client: catch unhandled error');
+            (0, _log.log)(e);
         }
     };
 };
-
-var _store = __webpack_require__(42);
 
 var _helper = __webpack_require__(112);
 
 var _log = __webpack_require__(62);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var CHECK_LIST = [
-// 'postMessage',
-'sw-msg-send', 'sw-msg-got', 'main-msg-send', 'main-msg-got']; /**
-                                                                * @file postmessage-test
-                                                                * @author ruoran (liuruoran@baidu.com)
-                                                                */
-
-var ch = void 0;
 
 /***/ }),
 
@@ -4455,6 +4280,33 @@ module.exports = function (iterator, fn, value, entries) {
 
 /***/ }),
 
+/***/ 515:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _base = __webpack_require__(123);
+
+var _demo = __webpack_require__(223);
+
+var _demo2 = _interopRequireDefault(_demo);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * @file fetch & fetchEvent test
+ * @author clark-t (clarktanglei@163.com)
+ */
+
+var SCOPE = "/pwa-test" + '/cases/client/';
+
+// let case = caseCreator(SCOPE);
+
+(0, _base.run)((0, _demo2.default)(SCOPE));
+
+/***/ }),
+
 /***/ 52:
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -4467,33 +4319,6 @@ module.exports = function (it) {
   return it !== undefined && (Iterators.Array === it || ArrayProto[ITERATOR] === it);
 };
 
-
-/***/ }),
-
-/***/ 523:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _base = __webpack_require__(123);
-
-var _demo = __webpack_require__(220);
-
-var _demo2 = _interopRequireDefault(_demo);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * @file postmessage-test by iframe
- * @author ruoran (liuruoran@baidu.com)
- */
-
-var SCOPE = "/pwa-test" + '/cases/postmessage/';
-
-// let case = caseCreator(SCOPE);
-
-(0, _base.run)((0, _demo2.default)(SCOPE));
 
 /***/ }),
 

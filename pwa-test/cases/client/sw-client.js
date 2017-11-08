@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 258);
+/******/ 	return __webpack_require__(__webpack_require__.s = 252);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -6790,13 +6790,7 @@ module.exports = function (KEY, exec) {
 /* 249 */,
 /* 250 */,
 /* 251 */,
-/* 252 */,
-/* 253 */,
-/* 254 */,
-/* 255 */,
-/* 256 */,
-/* 257 */,
-/* 258 */
+/* 252 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6817,89 +6811,90 @@ var _log = __webpack_require__(62);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
- * @file sw-1.js
+ * @file fetch sw
  * @author clark-t (clarktanglei@163.com)
  */
 
-var installWaitingScore = 0;
-
 self.addEventListener('install', function (e) {
-    (0, _log.log)('lifecycle sw-lifecycle: oninstall');
-    (0, _helper.grade)('installEvent', 1);
-
-    if (e.waitUntil) {
-        e.waitUntil((0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
-            return _regenerator2.default.wrap(function _callee$(_context) {
-                while (1) {
-                    switch (_context.prev = _context.next) {
-                        case 0:
-                            _context.next = 2;
-                            return (0, _helper.sleep)(100);
-
-                        case 2:
-                            (0, _log.log)('lifecycle sw-lifecycle: installEvent.waitUntil wait for 1s');
-                            _context.next = 5;
-                            return (0, _helper.sleep)(1000);
-
-                        case 5:
-
-                            installWaitingScore = 1;
-                            (0, _log.log)('lifecycle sw-lifecycle: installEvent.waitUntil wait for 1s finished');
-
-                            _context.next = 9;
-                            return (0, _helper.sleep)(100);
-
-                        case 9:
-                        case 'end':
-                            return _context.stop();
-                    }
-                }
-            }, _callee, undefined);
-        }))());
-    }
-
-    (0, _log.log)('lifecycle sw-lifecycle: skipWaiting');
     self.skipWaiting();
 });
 
-self.addEventListener('activate', function (e) {
-    (0, _log.log)('lifecycle sw-lifecycle: onactivate');
-    (0, _helper.grade)('self.skipWaiting', 1);
-    (0, _helper.grade)('installEvent.waitUntil', installWaitingScore);
-    (0, _helper.grade)('activateEvent', 1);
+self.addEventListener('activate', function () {
+    var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(e) {
+        var clientList, client, clientById;
+        return _regenerator2.default.wrap(function _callee$(_context) {
+            while (1) {
+                switch (_context.prev = _context.next) {
+                    case 0:
+                        if (!self.clients) {
+                            _context.next = 4;
+                            break;
+                        }
 
-    if (e.waitUntil) {
-        e.waitUntil((0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2() {
-            return _regenerator2.default.wrap(function _callee2$(_context2) {
-                while (1) {
-                    switch (_context2.prev = _context2.next) {
-                        case 0:
-                            _context2.next = 2;
-                            return (0, _helper.sleep)(100);
+                        (0, _helper.grade)('clients', 1);
+                        _context.next = 5;
+                        break;
 
-                        case 2:
-                            (0, _log.log)('lifecycle sw-lifecycle: activateEvent.waitUntil wait for 1s');
-                            _context2.next = 5;
-                            return (0, _helper.sleep)(1000);
+                    case 4:
+                        return _context.abrupt('return');
 
-                        case 5:
-                            (0, _helper.grade)('activateEvent.waitUntil', 0.5);
-                            (0, _log.log)('lifecycle sw-lifecycle: activateEvent.waitUntil wait for 1s finished');
-                            _context2.next = 9;
-                            return (0, _helper.sleep)(100);
+                    case 5:
 
-                        case 9:
-                        case 'end':
-                            return _context2.stop();
-                    }
+                        self.clients.claim();
+
+                        _context.next = 8;
+                        return self.clients.matchAll();
+
+                    case 8:
+                        clientList = _context.sent;
+
+                        if (!(clientList && clientList.length)) {
+                            _context.next = 22;
+                            break;
+                        }
+
+                        _context.next = 12;
+                        return (0, _helper.grade)('clients.matchAll', 1);
+
+                    case 12:
+                        (0, _log.log)('client sw-client: clients.matchAll works');
+
+                        client = clientList[0];
+
+                        if (!(client && client.id)) {
+                            _context.next = 22;
+                            break;
+                        }
+
+                        _context.next = 17;
+                        return self.clients.get(client.id);
+
+                    case 17:
+                        clientById = _context.sent;
+
+                        if (!clientById) {
+                            _context.next = 22;
+                            break;
+                        }
+
+                        _context.next = 21;
+                        return (0, _helper.grade)('clients.get', 1);
+
+                    case 21:
+                        (0, _log.log)('client sw-client: clients.get works');
+
+                    case 22:
+                    case 'end':
+                        return _context.stop();
                 }
-            }, _callee2, undefined);
-        }))());
-    }
+            }
+        }, _callee, undefined);
+    }));
 
-    (0, _log.log)('lifecycle sw-lifecycle: clients.cliam');
-    self.clients.claim();
-});
+    return function (_x) {
+        return _ref.apply(this, arguments);
+    };
+}());
 
 /***/ })
 /******/ ]);
