@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 523);
+/******/ 	return __webpack_require__(__webpack_require__.s = 525);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -3425,474 +3425,6 @@ module.exports = function (fn, that, length) {
 
 /***/ }),
 
-/***/ 133:
-/***/ (function(module, exports) {
-
-(function(self) {
-  'use strict';
-
-  if (self.fetch) {
-    return
-  }
-
-  var support = {
-    searchParams: 'URLSearchParams' in self,
-    iterable: 'Symbol' in self && 'iterator' in Symbol,
-    blob: 'FileReader' in self && 'Blob' in self && (function() {
-      try {
-        new Blob()
-        return true
-      } catch(e) {
-        return false
-      }
-    })(),
-    formData: 'FormData' in self,
-    arrayBuffer: 'ArrayBuffer' in self
-  }
-
-  if (support.arrayBuffer) {
-    var viewClasses = [
-      '[object Int8Array]',
-      '[object Uint8Array]',
-      '[object Uint8ClampedArray]',
-      '[object Int16Array]',
-      '[object Uint16Array]',
-      '[object Int32Array]',
-      '[object Uint32Array]',
-      '[object Float32Array]',
-      '[object Float64Array]'
-    ]
-
-    var isDataView = function(obj) {
-      return obj && DataView.prototype.isPrototypeOf(obj)
-    }
-
-    var isArrayBufferView = ArrayBuffer.isView || function(obj) {
-      return obj && viewClasses.indexOf(Object.prototype.toString.call(obj)) > -1
-    }
-  }
-
-  function normalizeName(name) {
-    if (typeof name !== 'string') {
-      name = String(name)
-    }
-    if (/[^a-z0-9\-#$%&'*+.\^_`|~]/i.test(name)) {
-      throw new TypeError('Invalid character in header field name')
-    }
-    return name.toLowerCase()
-  }
-
-  function normalizeValue(value) {
-    if (typeof value !== 'string') {
-      value = String(value)
-    }
-    return value
-  }
-
-  // Build a destructive iterator for the value list
-  function iteratorFor(items) {
-    var iterator = {
-      next: function() {
-        var value = items.shift()
-        return {done: value === undefined, value: value}
-      }
-    }
-
-    if (support.iterable) {
-      iterator[Symbol.iterator] = function() {
-        return iterator
-      }
-    }
-
-    return iterator
-  }
-
-  function Headers(headers) {
-    this.map = {}
-
-    if (headers instanceof Headers) {
-      headers.forEach(function(value, name) {
-        this.append(name, value)
-      }, this)
-    } else if (Array.isArray(headers)) {
-      headers.forEach(function(header) {
-        this.append(header[0], header[1])
-      }, this)
-    } else if (headers) {
-      Object.getOwnPropertyNames(headers).forEach(function(name) {
-        this.append(name, headers[name])
-      }, this)
-    }
-  }
-
-  Headers.prototype.append = function(name, value) {
-    name = normalizeName(name)
-    value = normalizeValue(value)
-    var oldValue = this.map[name]
-    this.map[name] = oldValue ? oldValue+','+value : value
-  }
-
-  Headers.prototype['delete'] = function(name) {
-    delete this.map[normalizeName(name)]
-  }
-
-  Headers.prototype.get = function(name) {
-    name = normalizeName(name)
-    return this.has(name) ? this.map[name] : null
-  }
-
-  Headers.prototype.has = function(name) {
-    return this.map.hasOwnProperty(normalizeName(name))
-  }
-
-  Headers.prototype.set = function(name, value) {
-    this.map[normalizeName(name)] = normalizeValue(value)
-  }
-
-  Headers.prototype.forEach = function(callback, thisArg) {
-    for (var name in this.map) {
-      if (this.map.hasOwnProperty(name)) {
-        callback.call(thisArg, this.map[name], name, this)
-      }
-    }
-  }
-
-  Headers.prototype.keys = function() {
-    var items = []
-    this.forEach(function(value, name) { items.push(name) })
-    return iteratorFor(items)
-  }
-
-  Headers.prototype.values = function() {
-    var items = []
-    this.forEach(function(value) { items.push(value) })
-    return iteratorFor(items)
-  }
-
-  Headers.prototype.entries = function() {
-    var items = []
-    this.forEach(function(value, name) { items.push([name, value]) })
-    return iteratorFor(items)
-  }
-
-  if (support.iterable) {
-    Headers.prototype[Symbol.iterator] = Headers.prototype.entries
-  }
-
-  function consumed(body) {
-    if (body.bodyUsed) {
-      return Promise.reject(new TypeError('Already read'))
-    }
-    body.bodyUsed = true
-  }
-
-  function fileReaderReady(reader) {
-    return new Promise(function(resolve, reject) {
-      reader.onload = function() {
-        resolve(reader.result)
-      }
-      reader.onerror = function() {
-        reject(reader.error)
-      }
-    })
-  }
-
-  function readBlobAsArrayBuffer(blob) {
-    var reader = new FileReader()
-    var promise = fileReaderReady(reader)
-    reader.readAsArrayBuffer(blob)
-    return promise
-  }
-
-  function readBlobAsText(blob) {
-    var reader = new FileReader()
-    var promise = fileReaderReady(reader)
-    reader.readAsText(blob)
-    return promise
-  }
-
-  function readArrayBufferAsText(buf) {
-    var view = new Uint8Array(buf)
-    var chars = new Array(view.length)
-
-    for (var i = 0; i < view.length; i++) {
-      chars[i] = String.fromCharCode(view[i])
-    }
-    return chars.join('')
-  }
-
-  function bufferClone(buf) {
-    if (buf.slice) {
-      return buf.slice(0)
-    } else {
-      var view = new Uint8Array(buf.byteLength)
-      view.set(new Uint8Array(buf))
-      return view.buffer
-    }
-  }
-
-  function Body() {
-    this.bodyUsed = false
-
-    this._initBody = function(body) {
-      this._bodyInit = body
-      if (!body) {
-        this._bodyText = ''
-      } else if (typeof body === 'string') {
-        this._bodyText = body
-      } else if (support.blob && Blob.prototype.isPrototypeOf(body)) {
-        this._bodyBlob = body
-      } else if (support.formData && FormData.prototype.isPrototypeOf(body)) {
-        this._bodyFormData = body
-      } else if (support.searchParams && URLSearchParams.prototype.isPrototypeOf(body)) {
-        this._bodyText = body.toString()
-      } else if (support.arrayBuffer && support.blob && isDataView(body)) {
-        this._bodyArrayBuffer = bufferClone(body.buffer)
-        // IE 10-11 can't handle a DataView body.
-        this._bodyInit = new Blob([this._bodyArrayBuffer])
-      } else if (support.arrayBuffer && (ArrayBuffer.prototype.isPrototypeOf(body) || isArrayBufferView(body))) {
-        this._bodyArrayBuffer = bufferClone(body)
-      } else {
-        throw new Error('unsupported BodyInit type')
-      }
-
-      if (!this.headers.get('content-type')) {
-        if (typeof body === 'string') {
-          this.headers.set('content-type', 'text/plain;charset=UTF-8')
-        } else if (this._bodyBlob && this._bodyBlob.type) {
-          this.headers.set('content-type', this._bodyBlob.type)
-        } else if (support.searchParams && URLSearchParams.prototype.isPrototypeOf(body)) {
-          this.headers.set('content-type', 'application/x-www-form-urlencoded;charset=UTF-8')
-        }
-      }
-    }
-
-    if (support.blob) {
-      this.blob = function() {
-        var rejected = consumed(this)
-        if (rejected) {
-          return rejected
-        }
-
-        if (this._bodyBlob) {
-          return Promise.resolve(this._bodyBlob)
-        } else if (this._bodyArrayBuffer) {
-          return Promise.resolve(new Blob([this._bodyArrayBuffer]))
-        } else if (this._bodyFormData) {
-          throw new Error('could not read FormData body as blob')
-        } else {
-          return Promise.resolve(new Blob([this._bodyText]))
-        }
-      }
-
-      this.arrayBuffer = function() {
-        if (this._bodyArrayBuffer) {
-          return consumed(this) || Promise.resolve(this._bodyArrayBuffer)
-        } else {
-          return this.blob().then(readBlobAsArrayBuffer)
-        }
-      }
-    }
-
-    this.text = function() {
-      var rejected = consumed(this)
-      if (rejected) {
-        return rejected
-      }
-
-      if (this._bodyBlob) {
-        return readBlobAsText(this._bodyBlob)
-      } else if (this._bodyArrayBuffer) {
-        return Promise.resolve(readArrayBufferAsText(this._bodyArrayBuffer))
-      } else if (this._bodyFormData) {
-        throw new Error('could not read FormData body as text')
-      } else {
-        return Promise.resolve(this._bodyText)
-      }
-    }
-
-    if (support.formData) {
-      this.formData = function() {
-        return this.text().then(decode)
-      }
-    }
-
-    this.json = function() {
-      return this.text().then(JSON.parse)
-    }
-
-    return this
-  }
-
-  // HTTP methods whose capitalization should be normalized
-  var methods = ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PUT']
-
-  function normalizeMethod(method) {
-    var upcased = method.toUpperCase()
-    return (methods.indexOf(upcased) > -1) ? upcased : method
-  }
-
-  function Request(input, options) {
-    options = options || {}
-    var body = options.body
-
-    if (input instanceof Request) {
-      if (input.bodyUsed) {
-        throw new TypeError('Already read')
-      }
-      this.url = input.url
-      this.credentials = input.credentials
-      if (!options.headers) {
-        this.headers = new Headers(input.headers)
-      }
-      this.method = input.method
-      this.mode = input.mode
-      if (!body && input._bodyInit != null) {
-        body = input._bodyInit
-        input.bodyUsed = true
-      }
-    } else {
-      this.url = String(input)
-    }
-
-    this.credentials = options.credentials || this.credentials || 'omit'
-    if (options.headers || !this.headers) {
-      this.headers = new Headers(options.headers)
-    }
-    this.method = normalizeMethod(options.method || this.method || 'GET')
-    this.mode = options.mode || this.mode || null
-    this.referrer = null
-
-    if ((this.method === 'GET' || this.method === 'HEAD') && body) {
-      throw new TypeError('Body not allowed for GET or HEAD requests')
-    }
-    this._initBody(body)
-  }
-
-  Request.prototype.clone = function() {
-    return new Request(this, { body: this._bodyInit })
-  }
-
-  function decode(body) {
-    var form = new FormData()
-    body.trim().split('&').forEach(function(bytes) {
-      if (bytes) {
-        var split = bytes.split('=')
-        var name = split.shift().replace(/\+/g, ' ')
-        var value = split.join('=').replace(/\+/g, ' ')
-        form.append(decodeURIComponent(name), decodeURIComponent(value))
-      }
-    })
-    return form
-  }
-
-  function parseHeaders(rawHeaders) {
-    var headers = new Headers()
-    rawHeaders.split(/\r?\n/).forEach(function(line) {
-      var parts = line.split(':')
-      var key = parts.shift().trim()
-      if (key) {
-        var value = parts.join(':').trim()
-        headers.append(key, value)
-      }
-    })
-    return headers
-  }
-
-  Body.call(Request.prototype)
-
-  function Response(bodyInit, options) {
-    if (!options) {
-      options = {}
-    }
-
-    this.type = 'default'
-    this.status = 'status' in options ? options.status : 200
-    this.ok = this.status >= 200 && this.status < 300
-    this.statusText = 'statusText' in options ? options.statusText : 'OK'
-    this.headers = new Headers(options.headers)
-    this.url = options.url || ''
-    this._initBody(bodyInit)
-  }
-
-  Body.call(Response.prototype)
-
-  Response.prototype.clone = function() {
-    return new Response(this._bodyInit, {
-      status: this.status,
-      statusText: this.statusText,
-      headers: new Headers(this.headers),
-      url: this.url
-    })
-  }
-
-  Response.error = function() {
-    var response = new Response(null, {status: 0, statusText: ''})
-    response.type = 'error'
-    return response
-  }
-
-  var redirectStatuses = [301, 302, 303, 307, 308]
-
-  Response.redirect = function(url, status) {
-    if (redirectStatuses.indexOf(status) === -1) {
-      throw new RangeError('Invalid status code')
-    }
-
-    return new Response(null, {status: status, headers: {location: url}})
-  }
-
-  self.Headers = Headers
-  self.Request = Request
-  self.Response = Response
-
-  self.fetch = function(input, init) {
-    return new Promise(function(resolve, reject) {
-      var request = new Request(input, init)
-      var xhr = new XMLHttpRequest()
-
-      xhr.onload = function() {
-        var options = {
-          status: xhr.status,
-          statusText: xhr.statusText,
-          headers: parseHeaders(xhr.getAllResponseHeaders() || '')
-        }
-        options.url = 'responseURL' in xhr ? xhr.responseURL : options.headers.get('X-Request-URL')
-        var body = 'response' in xhr ? xhr.response : xhr.responseText
-        resolve(new Response(body, options))
-      }
-
-      xhr.onerror = function() {
-        reject(new TypeError('Network request failed'))
-      }
-
-      xhr.ontimeout = function() {
-        reject(new TypeError('Network request failed'))
-      }
-
-      xhr.open(request.method, request.url, true)
-
-      if (request.credentials === 'include') {
-        xhr.withCredentials = true
-      }
-
-      if ('responseType' in xhr && support.blob) {
-        xhr.responseType = 'blob'
-      }
-
-      request.headers.forEach(function(value, name) {
-        xhr.setRequestHeader(name, value)
-      })
-
-      xhr.send(typeof request._bodyInit === 'undefined' ? null : request._bodyInit)
-    })
-  }
-  self.fetch.polyfill = true
-})(typeof self !== 'undefined' ? self : this);
-
-
-/***/ }),
-
 /***/ 14:
 /***/ (function(module, exports) {
 
@@ -4018,7 +3550,21 @@ for (var i = 0; i < DOMIterables.length; i++) {
 
 /***/ }),
 
-/***/ 215:
+/***/ 22:
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.2.14 / 15.2.3.14 Object.keys(O)
+var $keys = __webpack_require__(48);
+var enumBugKeys = __webpack_require__(32);
+
+module.exports = Object.keys || function keys(O) {
+  return $keys(O, enumBugKeys);
+};
+
+
+/***/ }),
+
+/***/ 225:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4038,160 +3584,95 @@ var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
 exports.default = function (scope) {
     return {
-        name: 'lifecycle',
+        name: 'payment',
         scope: scope,
         features: CHECK_LIST,
         main: function main() {
             var _this = this;
 
             return (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2() {
-                var reg, worker, reg2, result;
+                var request;
                 return _regenerator2.default.wrap(function _callee2$(_context2) {
                     while (1) {
                         switch (_context2.prev = _context2.next) {
                             case 0:
-                                if (!navigator.serviceWorker) {
-                                    _context2.next = 6;
+
+                                (0, _log.log)('<< payment test >>');
+
+                                if (window.PaymentRequest) {
+                                    _context2.next = 4;
                                     break;
                                 }
 
-                                _context2.next = 3;
-                                return (0, _helper.grade)('navigator.serviceWorker', 1);
-
-                            case 3:
-                                (0, _log.log)('lifecycle: navigator.serviceWorker exist');
-                                _context2.next = 8;
-                                break;
-
-                            case 6:
-                                (0, _log.log)('lifecycle: navigator.serviceWorker unsupport');
+                                (0, _log.log)('no-support PaymentRequest');
                                 return _context2.abrupt('return');
 
-                            case 8:
+                            case 4:
+                                request = new PaymentRequest(METHOD_DATA, // required payment method data
+                                DETAILS, // required information about transaction
+                                OPTIONS // optional parameter for things like shipping, etc.
+                                );
+                                _context2.next = 7;
+                                return (0, _helper.grade)('paymentRequest', 1);
 
-                                if (navigator.serviceWorker.ready) {
-                                    navigator.serviceWorker.ready.then(function () {
-                                        (0, _helper.grade)('navigator.serviceWorker.ready', 1);
-                                        (0, _log.log)('lifecycle: sw is ready');
-                                    });
+                            case 7:
+                                (0, _log.log)('-- new paymentRequest done --', 1, request);
+
+                                if (!(request && request.show)) {
+                                    _context2.next = 13;
+                                    break;
                                 }
 
-                                navigator.serviceWorker.addEventListener('controllerchange', function (e) {
-                                    (0, _helper.grade)('oncontrollerchange', 1);
-                                    (0, _log.log)('lifecycle: oncontrollerchange');
+                                _context2.next = 11;
+                                return (0, _helper.grade)('paymentRequest.show', 1);
+
+                            case 11:
+                                (0, _log.log)('-- paymentRequest.show done --', 1);
+                                request.show().then(function (paymentResponse) {
+                                    (0, _log.log)('-- paymentResponse done --', 1, paymentResponse);
+                                    // Process paymentResponse here
+                                    paymentResponse.complete('success').then(function (res) {
+                                        (0, _log.log)('-- paymentResponse.complete done --', 1, paymentResponse);
+                                    });
+                                }).catch(function (err) {
+                                    (0, _log.log)('Uh oh, something bad happened', err.message);
                                 });
 
-                                (0, _log.log)('lifecycle: register sw-lifecycle.js');
-
-                                _context2.next = 13;
-                                return (0, _helper.register)(scope + 'sw-lifecycle.js', scope);
-
                             case 13:
-                                reg = _context2.sent;
-                                worker = reg.installing || reg.waiting || reg.active;
 
-
-                                if (worker) {
-                                    worker.addEventListener('statechange', function () {
-                                        var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(e) {
-                                            var state, score;
+                                if (request && request.abort) {
+                                    setTimeout(function () {
+                                        request.abort().then((0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
                                             return _regenerator2.default.wrap(function _callee$(_context) {
                                                 while (1) {
                                                     switch (_context.prev = _context.next) {
                                                         case 0:
-                                                            state = worker.state;
+                                                            _context.next = 2;
+                                                            return (0, _helper.grade)('paymentRequest.abort', 1);
 
-                                                            (0, _log.log)('lifecycle: statechange', state);
+                                                        case 2:
+                                                            (0, _log.log)('-- paymentRequest.abort done --', 1);
 
-                                                            (0, _helper.grade)('onstatechange', 1);
-
-                                                            if (!(state !== 'activated')) {
-                                                                _context.next = 5;
-                                                                break;
-                                                            }
-
-                                                            return _context.abrupt('return');
-
-                                                        case 5:
-                                                            _context.next = 7;
-                                                            return (0, _helper.sleep)(100);
-
-                                                        case 7:
-                                                            _context.next = 9;
-                                                            return _store.featureStore.getItem('activateEvent.waitUntil');
-
-                                                        case 9:
-                                                            score = _context.sent;
-
-                                                            if (+score > 0) {
-                                                                (0, _helper.grade)('activateEvent.waitUntil', 1);
-                                                            }
-
-                                                        case 11:
+                                                        case 3:
                                                         case 'end':
                                                             return _context.stop();
                                                     }
                                                 }
                                             }, _callee, _this);
-                                        }));
-
-                                        return function (_x) {
-                                            return _ref.apply(this, arguments);
-                                        };
-                                    }());
+                                        }))).catch(function () {
+                                            (0, _log.log)('Unable to abort.');
+                                        });
+                                    }, 3000);
                                 }
 
-                                reg.addEventListener('updatefound', function (e) {
-                                    (0, _helper.grade)('onupdatefound', 1);
-                                });
+                                _context2.next = 16;
+                                return (0, _helper.sleep)(3000);
 
-                                (0, _log.log)('lifecycle: sw-lifecycle.js registered', reg);
-                                _context2.next = 20;
-                                return (0, _helper.grade)('Registered', 0.5);
+                            case 16:
 
-                            case 20:
+                                (0, _log.log)('payment: test finish');
 
-                                (0, _log.log)('lifecycle: sleep for 5s');
-                                _context2.next = 23;
-                                return (0, _helper.sleep)(5000);
-
-                            case 23:
-
-                                (0, _log.log)('lifecycle: register sw-lifecycle-2.js');
-
-                                _context2.next = 26;
-                                return (0, _helper.register)(scope + 'sw-lifecycle-2.js', scope);
-
-                            case 26:
-                                reg2 = _context2.sent;
-                                _context2.next = 29;
-                                return (0, _helper.grade)('Registered', 1);
-
-                            case 29:
-
-                                (0, _log.log)('lifecycle: sleep for 2s');
-                                _context2.next = 32;
-                                return (0, _helper.sleep)(2000);
-
-                            case 32:
-
-                                (0, _log.log)('lifecycle: unregister sw-lifecycle-2.js');
-                                _context2.next = 35;
-                                return reg2.unregister();
-
-                            case 35:
-                                result = _context2.sent;
-
-
-                                (0, _log.log)('lifecycle: sw-lifecycle.js is unregistered', result);
-                                _context2.next = 39;
-                                return (0, _helper.grade)('Unregistered', 1);
-
-                            case 39:
-
-                                (0, _log.log)('lifecycle: test finished');
-
-                            case 40:
+                            case 17:
                             case 'end':
                                 return _context2.stop();
                         }
@@ -4200,14 +3681,11 @@ exports.default = function (scope) {
             }))();
         },
         error: function error(e) {
-            (0, _log.log)('lifecycle: catch unhandled error', e);
+            (0, _log.log)('payment: catch unhandled error');
+            (0, _log.log)(e);
         }
     };
 };
-
-__webpack_require__(133);
-
-var _store = __webpack_require__(42);
 
 var _helper = __webpack_require__(112);
 
@@ -4216,26 +3694,44 @@ var _log = __webpack_require__(62);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
- * @file lifecycle-test
+ * @file payment-test
  * @author ruoran (liuruoran@baidu.com)
+ *
+ * reference: https://developers.google.com/web/fundamentals/payments
  */
-var CHECK_LIST = [
-// 'lifecycle',
-'navigator.serviceWorker', 'navigator.serviceWorker.ready', 'oncontrollerchange', 'onstatechange', 'onupdatefound', 'Registered', 'Unregistered', 'clients.claim', 'self.skipWaiting', 'installEvent', 'activateEvent', 'installEvent.waitUntil', 'activateEvent.waitUntil'];
 
-/***/ }),
+var CHECK_LIST = ['paymentRequest', 'paymentRequest.show', 'paymentRequest.abort'];
 
-/***/ 22:
-/***/ (function(module, exports, __webpack_require__) {
+var METHOD_DATA = [{
+    supportedMethods: ['visa', 'mastercard', 'amex', 'discover', 'maestro', 'diners', 'jcb', 'unionpay', 'bitcoin']
+}];
 
-// 19.1.2.14 / 15.2.3.14 Object.keys(O)
-var $keys = __webpack_require__(48);
-var enumBugKeys = __webpack_require__(32);
-
-module.exports = Object.keys || function keys(O) {
-  return $keys(O, enumBugKeys);
+var DETAILS = {
+    displayItems: [{
+        label: 'Original donation amount',
+        amount: { currency: 'USD', value: '10.00' } // US$10.00
+    }, {
+        label: 'Friends and family discount',
+        amount: { currency: 'USD', value: '-9.99' }, // -US$9.99
+        pending: true // The price is not determined yet
+    }],
+    total: {
+        label: 'Total',
+        amount: { currency: 'USD', value: '0.01' } // US$55.00
+    },
+    shippingOptions: [{
+        id: 'standard',
+        label: 'Standard shipping',
+        amount: { currency: 'USD', value: '0.00' },
+        selected: true
+    }, {
+        id: 'express',
+        label: 'Express shipping',
+        amount: { currency: 'USD', value: '12.00' }
+    }]
 };
 
+var OPTIONS = {};
 
 /***/ }),
 
@@ -4888,7 +4384,7 @@ module.exports = function (O, D) {
 
 /***/ }),
 
-/***/ 523:
+/***/ 525:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4896,17 +4392,20 @@ module.exports = function (O, D) {
 
 var _base = __webpack_require__(123);
 
-var _demo = __webpack_require__(215);
+var _demo = __webpack_require__(225);
 
 var _demo2 = _interopRequireDefault(_demo);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
- * @file lifecycle-test by iframe
+ * @file payment-test by iframe
  * @author ruoran (liuruoran@baidu.com)
  */
-var SCOPE = "/pwa-test" + '/cases/lifecycle/';
+
+var SCOPE = "/pwa-test" + '/cases/payment/';
+
+// let case = caseCreator(SCOPE);
 
 (0, _base.run)((0, _demo2.default)(SCOPE));
 
