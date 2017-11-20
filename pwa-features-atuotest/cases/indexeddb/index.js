@@ -3144,7 +3144,7 @@ function createStep(_ref11) {
 
     var name = _ref11.name,
         _ref11$prefix = _ref11.prefix,
-        prefix = _ref11$prefix === undefined ? 'pwa-test-step-' : _ref11$prefix;
+        prefix = _ref11$prefix === undefined ? 'pwa-features-autotest-step-' : _ref11$prefix;
 
     var key = prefix + name;
 
@@ -3739,7 +3739,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var CHECK_LIST = exports.CHECK_LIST = ['indexedDB', 'indexedDB.getAll'];
 
-var DB_NAME = 'pwa-test-indexeddb';
+var DB_NAME = 'pwa-features-autotest-indexeddb';
 var VERSION = 1;
 var STORE_NAME = 'test';
 

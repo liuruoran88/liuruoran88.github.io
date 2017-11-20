@@ -3144,7 +3144,7 @@ function createStep(_ref11) {
 
     var name = _ref11.name,
         _ref11$prefix = _ref11.prefix,
-        prefix = _ref11$prefix === undefined ? 'pwa-test-step-' : _ref11$prefix;
+        prefix = _ref11$prefix === undefined ? 'pwa-features-autotest-step-' : _ref11$prefix;
 
     var key = prefix + name;
 
