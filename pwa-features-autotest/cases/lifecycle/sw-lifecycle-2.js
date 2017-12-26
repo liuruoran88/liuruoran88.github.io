@@ -71,10 +71,15 @@
 "use strict";
 
 
+/**
+ * @file sw-2.js
+ * @author clark-t (clarktanglei@163.com)
+ */
+
 self.skipWaiting();
 
 self.addEventListener('activate', function (e) {
-    self.clients.claim();
+  self.clients.claim();
 });
 
 /***/ })
