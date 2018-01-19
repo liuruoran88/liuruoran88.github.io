@@ -6968,131 +6968,133 @@ self.addEventListener('install', function (e) {
                             return _context.abrupt('return');
 
                         case 3:
-                            _context.next = 5;
+                            (0, _log.log)('++++++++ sw-indexeddb in');
+
+                            _context.next = 6;
                             return (0, _indexeddb.createStore)();
 
-                        case 5:
+                        case 6:
                             store = _context.sent;
-                            _context.prev = 6;
-                            _context.next = 9;
+                            _context.prev = 7;
+                            _context.next = 10;
                             return store.get('a');
 
-                        case 9:
+                        case 10:
                             if (!_context.sent) {
-                                _context.next = 12;
+                                _context.next = 13;
                                 break;
                             }
 
-                            _context.next = 12;
+                            _context.next = 13;
                             return store.delete('a');
 
-                        case 12:
+                        case 13:
                             data = { key: 'a', value: 'b' };
-                            _context.next = 15;
+                            _context.next = 16;
                             return store.add(data);
 
-                        case 15:
+                        case 16:
                             (0, _log.log)('indexeddb sw-indexeddb: add data', data);
 
-                            _context.next = 18;
+                            _context.next = 19;
                             return store.get('a');
 
-                        case 18:
+                        case 19:
                             data = _context.sent;
 
                             (0, _log.log)('indexeddb sw-indexeddb: get data after add', data);
 
                             data = { key: 'a', value: 'c' };
-                            _context.next = 23;
+                            _context.next = 24;
                             return store.put(data);
 
-                        case 23:
+                        case 24:
                             (0, _log.log)('indexeddb sw-indexeddb: put data', data);
 
-                            _context.next = 26;
+                            _context.next = 27;
                             return store.get('a');
 
-                        case 26:
+                        case 27:
                             data = _context.sent;
 
                             (0, _log.log)('indexeddb sw-indexeddb: get data after put', data);
 
-                            _context.next = 30;
+                            _context.next = 31;
                             return store.delete('a');
 
-                        case 30:
+                        case 31:
                             (0, _log.log)('indexeddb sw-indexeddb: delete data');
 
-                            _context.next = 33;
+                            _context.next = 34;
                             return store.get('a');
 
-                        case 33:
+                        case 34:
                             data = _context.sent;
 
                             (0, _log.log)('indexeddb sw-indexeddb: get data after delete', data);
 
                             // grade('indexedDB', 1);
-                            _context.next = 40;
+                            _context.next = 41;
                             break;
 
-                        case 37:
-                            _context.prev = 37;
-                            _context.t0 = _context['catch'](6);
+                        case 38:
+                            _context.prev = 38;
+                            _context.t0 = _context['catch'](7);
 
                             (0, _log.log)('indexeddb sw-indexeddb: error happen when crud', _context.t0);
 
-                        case 40:
+                        case 41:
                             if (!store.getAll) {
-                                _context.next = 55;
+                                _context.next = 56;
                                 break;
                             }
 
-                            _context.prev = 41;
-                            _context.next = 44;
+                            _context.prev = 42;
+                            _context.next = 45;
                             return _promise2.default.all([store.put({ key: 'a', value: '1' }), store.put({ key: 'b', value: '2' })]);
 
-                        case 44:
-                            _context.next = 46;
+                        case 45:
+                            _context.next = 47;
                             return store.getAll();
 
-                        case 46:
+                        case 47:
                             result = _context.sent;
 
                             // grade('sw-indexeddb indexedDB.getAll', 1);
                             (0, _log.log)('sw-indexeddb indexeddb: getAll', result);
-                            _context.next = 53;
+                            _context.next = 54;
                             break;
 
-                        case 50:
-                            _context.prev = 50;
-                            _context.t1 = _context['catch'](41);
+                        case 51:
+                            _context.prev = 51;
+                            _context.t1 = _context['catch'](42);
 
                             (0, _log.log)('indexeddb sw-indexeddb: getAll error', _context.t1);
 
-                        case 53:
-                            _context.next = 56;
+                        case 54:
+                            _context.next = 57;
                             break;
 
-                        case 55:
+                        case 56:
                             (0, _log.log)('indexeddb sw-indexeddb: getAll unsupport');
 
-                        case 56:
+                        case 57:
 
                             (0, _indexeddb.deleteStore)();
 
-                            _context.next = 59;
+                            _context.next = 60;
                             return (0, _helper.sleep)(1000);
 
-                        case 59:
+                        case 60:
 
                             (0, _log.log)('indexeddb: test finish');
 
-                        case 60:
+                        case 61:
                         case 'end':
                             return _context.stop();
                     }
                 }
-            }, _callee, undefined, [[6, 37], [41, 50]]);
+            }, _callee, undefined, [[7, 38], [42, 51]]);
         }))());
     }
 
