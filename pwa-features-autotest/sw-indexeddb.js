@@ -7108,8 +7108,8 @@ self.addEventListener('install', function (e) {
                         case 61:
                             score = _context.sent;
 
-                            (0, _helper.grade)('indexedDB' + score + indexeddbScore);
-                            (0, _log.log)('- indexedDB done -' + score + indexeddbScore);
+                            (0, _helper.grade)('indexedDB', score + indexeddbScore);
+                            (0, _log.log)('- indexedDB done -', score + indexeddbScore);
 
                             _context.next = 66;
                             return (0, _helper.getGrade)('indexedDB.getAll');
@@ -7117,8 +7117,8 @@ self.addEventListener('install', function (e) {
                         case 66:
                             getallScore = _context.sent;
 
-                            (0, _helper.grade)('indexedDB.getAll' + getallScore + indexeddbGetallScore);
-                            (0, _log.log)('- indexeddb.getAll done -' + getallScore + indexeddbGetallScore);
+                            (0, _helper.grade)('indexedDB.getAll', getallScore + indexeddbGetallScore);
+                            (0, _log.log)('- indexeddb.getAll done -', getallScore + indexeddbGetallScore);
 
                             _context.next = 71;
                             return (0, _helper.sleep)(1000);
