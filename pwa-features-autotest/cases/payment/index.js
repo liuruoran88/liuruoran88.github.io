@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 235);
+/******/ 	return __webpack_require__(__webpack_require__.s = 236);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -445,7 +445,7 @@ module.exports = __webpack_require__(89);
 
 exports.__esModule = true;
 
-var _promise = __webpack_require__(42);
+var _promise = __webpack_require__(41);
 
 var _promise2 = _interopRequireDefault(_promise);
 
@@ -715,13 +715,13 @@ exports.default = typeof _symbol2.default === "function" && _typeof(_iterator2.d
 };
 
 /***/ }),
-/* 41 */,
-/* 42 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = { "default": __webpack_require__(69), __esModule: true };
 
 /***/ }),
+/* 42 */,
 /* 43 */
 /***/ (function(module, exports) {
 
@@ -1293,7 +1293,7 @@ var _typeof2 = __webpack_require__(40);
 
 var _typeof3 = _interopRequireDefault(_typeof2);
 
-var _promise = __webpack_require__(42);
+var _promise = __webpack_require__(41);
 
 var _promise2 = _interopRequireDefault(_promise);
 
@@ -1572,6 +1572,7 @@ exports.limit = limit;
 exports.until = until;
 exports.zero = zero;
 exports.grade = grade;
+exports.getGrade = getGrade;
 exports.createStep = createStep;
 exports.isEmpty = isEmpty;
 exports.isObject = isObject;
@@ -1720,6 +1721,10 @@ function grade(feature, score) {
     }
 
     return _store.featureStore.setItem(feature, score);
+}
+
+function getGrade(feature) {
+    return _store.featureStore.getItem(feature);
 }
 
 function createStep(_ref11) {
@@ -6842,7 +6847,8 @@ function showCaseName(caseName) {
 /* 177 */,
 /* 178 */,
 /* 179 */,
-/* 180 */
+/* 180 */,
+/* 181 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7014,7 +7020,6 @@ var OPTIONS = {};
 module.exports = exports['default'];
 
 /***/ }),
-/* 181 */,
 /* 182 */,
 /* 183 */,
 /* 184 */,
@@ -7068,7 +7073,8 @@ module.exports = exports['default'];
 /* 232 */,
 /* 233 */,
 /* 234 */,
-/* 235 */
+/* 235 */,
+/* 236 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7076,7 +7082,7 @@ module.exports = exports['default'];
 
 var _base = __webpack_require__(117);
 
-var _demo = __webpack_require__(180);
+var _demo = __webpack_require__(181);
 
 var _demo2 = _interopRequireDefault(_demo);
 

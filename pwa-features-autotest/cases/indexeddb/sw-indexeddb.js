@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 271);
+/******/ 	return __webpack_require__(__webpack_require__.s = 273);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -1270,7 +1270,554 @@ function random() {
 }
 
 /***/ }),
-/* 62 */,
+/* 62 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.one = exports.reload = exports.checkProperty = exports.checkProperties = exports.register = exports.init = undefined;
+
+var _toConsumableArray2 = __webpack_require__(60);
+
+var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+
+var _keys = __webpack_require__(113);
+
+var _keys2 = _interopRequireDefault(_keys);
+
+var _typeof2 = __webpack_require__(40);
+
+var _typeof3 = _interopRequireDefault(_typeof2);
+
+var _promise = __webpack_require__(41);
+
+var _promise2 = _interopRequireDefault(_promise);
+
+var _regenerator = __webpack_require__(23);
+
+var _regenerator2 = _interopRequireDefault(_regenerator);
+
+var _asyncToGenerator2 = __webpack_require__(24);
+
+var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
+
+/**
+ * unregister sw controller and then reload the page
+ *
+ * @param {Array} scopes description
+ * @param {number} timeout timeout
+ */
+/**
+ * @file helper.js
+ * @author clark-t (clarktanglei@163.com)
+ */
+
+var init = exports.init = function () {
+    var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2(scopes) {
+        var _this = this;
+
+        var timeout = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 5000;
+        var sw;
+        return _regenerator2.default.wrap(function _callee2$(_context2) {
+            while (1) {
+                switch (_context2.prev = _context2.next) {
+                    case 0:
+                        sw = navigator.serviceWorker;
+
+                        if (!(!sw || typeof sw.getRegistration !== 'function')) {
+                            _context2.next = 3;
+                            break;
+                        }
+
+                        return _context2.abrupt('return');
+
+                    case 3:
+                        _context2.prev = 3;
+                        _context2.next = 6;
+                        return limit((0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
+                            var results;
+                            return _regenerator2.default.wrap(function _callee$(_context) {
+                                while (1) {
+                                    switch (_context.prev = _context.next) {
+                                        case 0:
+                                            _context.next = 2;
+                                            return unregister(scopes);
+
+                                        case 2:
+                                            results = _context.sent;
+
+                                            if (!results.some(function (result) {
+                                                return result === true;
+                                            })) {
+                                                _context.next = 6;
+                                                break;
+                                            }
+
+                                            _context.next = 6;
+                                            return reload();
+
+                                        case 6:
+                                        case 'end':
+                                            return _context.stop();
+                                    }
+                                }
+                            }, _callee, _this);
+                        })), timeout);
+
+                    case 6:
+                        _context2.next = 11;
+                        break;
+
+                    case 8:
+                        _context2.prev = 8;
+                        _context2.t0 = _context2['catch'](3);
+
+                        console.log(_context2.t0);
+
+                    case 11:
+                    case 'end':
+                        return _context2.stop();
+                }
+            }
+        }, _callee2, this, [[3, 8]]);
+    }));
+
+    return function init(_x) {
+        return _ref.apply(this, arguments);
+    };
+}();
+
+var register = exports.register = function () {
+    var _ref3 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee3(filePath, scope) {
+        return _regenerator2.default.wrap(function _callee3$(_context3) {
+            while (1) {
+                switch (_context3.prev = _context3.next) {
+                    case 0:
+                        return _context3.abrupt('return', navigator.serviceWorker.register(filePath, { scope: scope }));
+
+                    case 1:
+                    case 'end':
+                        return _context3.stop();
+                }
+            }
+        }, _callee3, this);
+    }));
+
+    return function register(_x3, _x4) {
+        return _ref3.apply(this, arguments);
+    };
+}();
+
+var checkProperties = exports.checkProperties = function () {
+    var _ref5 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee5(scope, list, score, config) {
+        var map;
+        return _regenerator2.default.wrap(function _callee5$(_context5) {
+            while (1) {
+                switch (_context5.prev = _context5.next) {
+                    case 0:
+                        map = void 0;
+
+
+                        if (Array.isArray(list)) {
+                            map = list.map(function (name) {
+                                return [name, score];
+                            });
+                        } else {
+                            map = (0, _keys2.default)(list).map(function (name) {
+                                return [name, list[name]];
+                            });
+                            config = score;
+                        }
+
+                        _context5.next = 4;
+                        return _promise2.default.all(map.map(function (item) {
+                            return checkProperty(scope, item[0], item[1], config);
+                        }));
+
+                    case 4:
+                    case 'end':
+                        return _context5.stop();
+                }
+            }
+        }, _callee5, this);
+    }));
+
+    return function checkProperties(_x6, _x7, _x8, _x9) {
+        return _ref5.apply(this, arguments);
+    };
+}();
+
+var checkProperty = exports.checkProperty = function () {
+    var _ref6 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee6(scope, name, score) {
+        var _ref7 = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {},
+            _ref7$prefix = _ref7.prefix,
+            prefix = _ref7$prefix === undefined ? '' : _ref7$prefix;
+
+        return _regenerator2.default.wrap(function _callee6$(_context6) {
+            while (1) {
+                switch (_context6.prev = _context6.next) {
+                    case 0:
+                        if (!(_utils.get.apply(undefined, [scope].concat((0, _toConsumableArray3.default)(name.split('.')))) !== undefined)) {
+                            _context6.next = 3;
+                            break;
+                        }
+
+                        _context6.next = 3;
+                        return grade(prefix + name, score);
+
+                    case 3:
+                    case 'end':
+                        return _context6.stop();
+                }
+            }
+        }, _callee6, this);
+    }));
+
+    return function checkProperty(_x10, _x11, _x12) {
+        return _ref6.apply(this, arguments);
+    };
+}();
+
+/**
+ * reload webpage, return a no-resolve promise object to block execute
+ * usage: await reload();
+ *
+ * @return {Promise} promise object to block execute
+ */
+
+
+var reload = exports.reload = function () {
+    var _ref8 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee7() {
+        return _regenerator2.default.wrap(function _callee7$(_context7) {
+            while (1) {
+                switch (_context7.prev = _context7.next) {
+                    case 0:
+                        return _context7.abrupt('return', new _promise2.default(function () {
+                            location.reload();
+                        }));
+
+                    case 1:
+                    case 'end':
+                        return _context7.stop();
+                }
+            }
+        }, _callee7, this);
+    }));
+
+    return function reload() {
+        return _ref8.apply(this, arguments);
+    };
+}();
+
+/**
+ * attach a handler to an event, and the handler executes at most once per event type
+ *
+ * @param {Element} target event target
+ * @param {string} event event name
+ * @param {Function} fn event handler
+ * @return {Promise} promise
+ */
+
+
+var one = exports.one = function () {
+    var _ref9 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee8(target, event, fn) {
+        return _regenerator2.default.wrap(function _callee8$(_context8) {
+            while (1) {
+                switch (_context8.prev = _context8.next) {
+                    case 0:
+                        return _context8.abrupt('return', new _promise2.default(function (resolve, reject) {
+                            function handler(e) {
+                                _promise2.default.resolve(fn(e)).then(function () {
+                                    target.removeEventListener(event, handler);
+                                    resolve();
+                                }).catch(function () {
+                                    target.removeEventListener(event, handler);
+                                    reject();
+                                });
+                            }
+
+                            target.addEventListener(event, handler);
+                        }));
+
+                    case 1:
+                    case 'end':
+                        return _context8.stop();
+                }
+            }
+        }, _callee8, this);
+    }));
+
+    return function one(_x14, _x15, _x16) {
+        return _ref9.apply(this, arguments);
+    };
+}();
+
+/**
+ * block the execution for a period of time
+ *
+ * @param {number} duration sleep duration time
+ * @return {Promise} promise
+ */
+
+
+exports.unregister = unregister;
+exports.sleep = sleep;
+exports.uuid = uuid;
+exports.s4 = s4;
+exports.limit = limit;
+exports.until = until;
+exports.zero = zero;
+exports.grade = grade;
+exports.getGrade = getGrade;
+exports.createStep = createStep;
+exports.isEmpty = isEmpty;
+exports.isObject = isObject;
+
+var _utils = __webpack_require__(61);
+
+var _store = __webpack_require__(59);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function unregister(scopes) {
+    var _this2 = this;
+
+    var arr = Array.isArray(scopes) ? scopes : [scopes];
+
+    return _promise2.default.all(arr.map(function () {
+        var _ref4 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee4(scope) {
+            var reg;
+            return _regenerator2.default.wrap(function _callee4$(_context4) {
+                while (1) {
+                    switch (_context4.prev = _context4.next) {
+                        case 0:
+                            reg = void 0;
+                            _context4.t0 = typeof scope === 'undefined' ? 'undefined' : (0, _typeof3.default)(scope);
+                            _context4.next = _context4.t0 === 'string' ? 4 : _context4.t0 === 'object' ? 8 : 10;
+                            break;
+
+                        case 4:
+                            _context4.next = 6;
+                            return navigator.serviceWorker.getRegistration(scope);
+
+                        case 6:
+                            reg = _context4.sent;
+                            return _context4.abrupt('break', 14);
+
+                        case 8:
+                            reg = scope;
+                            return _context4.abrupt('break', 14);
+
+                        case 10:
+                            _context4.next = 12;
+                            return navigator.serviceWorker.getRegistration();
+
+                        case 12:
+                            reg = _context4.sent;
+                            return _context4.abrupt('break', 14);
+
+                        case 14:
+                            if (!(reg && (typeof reg === 'undefined' ? 'undefined' : (0, _typeof3.default)(reg)) === 'object')) {
+                                _context4.next = 18;
+                                break;
+                            }
+
+                            _context4.next = 17;
+                            return reg.unregister();
+
+                        case 17:
+                            return _context4.abrupt('return', _context4.sent);
+
+                        case 18:
+                        case 'end':
+                            return _context4.stop();
+                    }
+                }
+            }, _callee4, _this2);
+        }));
+
+        return function (_x5) {
+            return _ref4.apply(this, arguments);
+        };
+    }()));
+}
+
+function sleep(duration) {
+    return new _promise2.default(function (resolve) {
+        return setTimeout(resolve, duration);
+    });
+}
+
+// uuid
+function uuid(duration) {
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4() + '-' + Date.now();
+}
+
+// 4 random number
+function s4() {
+    return ((1 + Math.random()) * 0x10000 | 0).toString(16).substring(1);
+}
+
+function limit(fn, time) {
+    return new _promise2.default(function (resolve, reject) {
+        fn().then(resolve);
+        sleep(time).then(reject);
+    });
+}
+
+function until(fn) {
+    var _this3 = this;
+
+    var interval = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 50;
+
+    return new _promise2.default(function (resolve) {
+        var timer = setInterval((0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee9() {
+            return _regenerator2.default.wrap(function _callee9$(_context9) {
+                while (1) {
+                    switch (_context9.prev = _context9.next) {
+                        case 0:
+                            _context9.next = 2;
+                            return fn();
+
+                        case 2:
+                            if (!_context9.sent) {
+                                _context9.next = 5;
+                                break;
+                            }
+
+                            clearInterval(timer);
+                            resolve();
+
+                        case 5:
+                        case 'end':
+                            return _context9.stop();
+                    }
+                }
+            }, _callee9, _this3);
+        })), interval);
+    });
+}
+
+function zero(list) {
+    return _promise2.default.all(list.map(function (feature) {
+        return _store.featureStore.setItem(feature, 0);
+    }));
+}
+
+function grade(feature, score) {
+    try {
+        if (typeof parent !== 'undefined' && parent.schedulePerCase) {
+            parent.schedulePerCase({
+                feature: feature,
+                score: score
+            });
+        }
+    } catch (e) {
+        console.log(e);
+    }
+
+    return _store.featureStore.setItem(feature, score);
+}
+
+function getGrade(feature) {
+    return _store.featureStore.getItem(feature);
+}
+
+function createStep(_ref11) {
+    var _this4 = this;
+
+    var name = _ref11.name,
+        _ref11$prefix = _ref11.prefix,
+        prefix = _ref11$prefix === undefined ? 'pwa-features-autotest-step-' : _ref11$prefix;
+
+    var key = prefix + name;
+
+    var stepNumber = -1;
+    var target = +localStorage.getItem(key);
+
+    var step = function () {
+        var _ref12 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee10(fn) {
+            var needReload = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+            return _regenerator2.default.wrap(function _callee10$(_context10) {
+                while (1) {
+                    switch (_context10.prev = _context10.next) {
+                        case 0:
+                            stepNumber++;
+
+                            if (!(target === stepNumber)) {
+                                _context10.next = 9;
+                                break;
+                            }
+
+                            _context10.next = 4;
+                            return fn();
+
+                        case 4:
+
+                            target++;
+                            localStorage.setItem(key, target);
+
+                            if (!needReload) {
+                                _context10.next = 9;
+                                break;
+                            }
+
+                            _context10.next = 9;
+                            return reload();
+
+                        case 9:
+                        case 'end':
+                            return _context10.stop();
+                    }
+                }
+            }, _callee10, _this4);
+        }));
+
+        return function step(_x18) {
+            return _ref12.apply(this, arguments);
+        };
+    }();
+
+    step.done = function () {
+        localStorage.removeItem(key);
+    };
+
+    return step;
+}
+
+/**
+ * Empty
+ *
+ * @param  {anything}  obj obj
+ * @return {boolean} is  "", {}, [], 0, null, undefined, false   empty
+ */
+function isEmpty(obj) {
+    if (Array.isArray(obj)) {
+        return obj.length === 0;
+    } else if (isObject(obj)) {
+        return (0, _keys2.default)(obj).length === 0;
+    }
+
+    return !obj;
+}
+
+/**
+ * Object or not
+ *
+ * @param  {anything} obj obj
+ * @return {boolean} is Object
+ */
+function isObject(obj) {
+    return Object.prototype.toString.call(obj) === '[object Object]';
+    // incase of arrow function and array
+    // return Object(obj) === obj && String(obj) === '[object Object]' && typeof obj !== 'function' && !Array.isArray(obj);
+}
+
+/***/ }),
 /* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -6099,10 +6646,51 @@ module.exports = __webpack_require__(1).getIterator = function (it) {
 
 
 /***/ }),
-/* 113 */,
-/* 114 */,
-/* 115 */,
-/* 116 */,
+/* 113 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__(114), __esModule: true };
+
+/***/ }),
+/* 114 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(115);
+module.exports = __webpack_require__(1).Object.keys;
+
+
+/***/ }),
+/* 115 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.2.14 Object.keys(O)
+var toObject = __webpack_require__(39);
+var $keys = __webpack_require__(22);
+
+__webpack_require__(116)('keys', function () {
+  return function keys(it) {
+    return $keys(toObject(it));
+  };
+});
+
+
+/***/ }),
+/* 116 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// most Object methods by ES6 should accept primitives
+var $export = __webpack_require__(9);
+var core = __webpack_require__(1);
+var fails = __webpack_require__(16);
+module.exports = function (KEY, exec) {
+  var fn = (core.Object || {})[KEY] || Object[KEY];
+  var exp = {};
+  exp[KEY] = exec(fn);
+  $export($export.S + $export.F * fails(function () { fn(1); }), 'Object', exp);
+};
+
+
+/***/ }),
 /* 117 */,
 /* 118 */,
 /* 119 */,
@@ -6132,7 +6720,99 @@ module.exports = __webpack_require__(1).getIterator = function (it) {
 /* 143 */,
 /* 144 */,
 /* 145 */,
-/* 146 */,
+/* 146 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _promise = __webpack_require__(41);
+
+var _promise2 = _interopRequireDefault(_promise);
+
+exports.createStore = createStore;
+exports.deleteStore = deleteStore;
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * @file indexeddb indexeddb.js
+ * @author clark-t (clarktanglei@163.com)
+ */
+
+function createStore(_ref) {
+    var _ref$dbName = _ref.dbName,
+        dbName = _ref$dbName === undefined ? 'pwa-features-autotest-indexeddb' : _ref$dbName,
+        _ref$version = _ref.version,
+        version = _ref$version === undefined ? '1' : _ref$version,
+        _ref$storeName = _ref.storeName,
+        storeName = _ref$storeName === undefined ? 'test' : _ref$storeName;
+
+    return new _promise2.default(function (resolve, reject) {
+        var request = indexedDB.open(dbName, version);
+        request.onerror = function (event) {
+            return reject(event);
+        };
+
+        request.onupgradeneeded = function (event) {
+            var db = request.result;
+            if (!db.objectStoreNames.contains(storeName)) {
+                var objectStore = db.createObjectStore(storeName, { keyPath: 'key' });
+                objectStore.createIndex('key', 'key', { unique: true });
+                objectStore.createIndex('value', 'value', { unique: false });
+            }
+        };
+
+        request.onsuccess = function (event) {
+            var db = request.result;
+
+            db.onerror = function (event) {
+                return reject(event);
+            };
+
+            var transaction = db.transaction('test', 'readwrite');
+            var store = transaction.objectStore('test');
+
+            var promisifyStore = ['add', 'get', 'put', 'delete', 'getAll'].reduce(function (obj, key) {
+                if (typeof store[key] === 'function') {
+                    obj[key] = function () {
+                        return promisify(store[key].apply(store, arguments));
+                    };
+                }
+                return obj;
+            }, {});
+
+            resolve(promisifyStore);
+        };
+    });
+}
+
+function deleteStore(_ref2) {
+    var _ref2$dbName = _ref2.dbName,
+        dbName = _ref2$dbName === undefined ? 'pwa-features-autotest-indexeddb' : _ref2$dbName;
+
+    try {
+        indexedDB.deleteDatabase(dbName);
+    } catch (e) {}
+}
+
+function promisify(request) {
+    return new _promise2.default(function (resolve, reject) {
+        request.onsuccess = function (event) {
+            resolve(event.target.result);
+        };
+
+        request.onerror = function (event) {
+            reject(event);
+        };
+    });
+}
+
+/***/ }),
 /* 147 */,
 /* 148 */,
 /* 149 */,
@@ -6257,18 +6937,210 @@ module.exports = __webpack_require__(1).getIterator = function (it) {
 /* 268 */,
 /* 269 */,
 /* 270 */,
-/* 271 */
+/* 271 */,
+/* 272 */,
+/* 273 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
+var _regenerator = __webpack_require__(23);
+
+var _regenerator2 = _interopRequireDefault(_regenerator);
+
+var _promise = __webpack_require__(41);
+
+var _promise2 = _interopRequireDefault(_promise);
+
+var _asyncToGenerator2 = __webpack_require__(24);
+
+var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
+
+var _helper = __webpack_require__(62);
+
 var _log = __webpack_require__(63);
 
-(0, _log.log)('getregistration: in sw-2/sw.js'); /**
-                                                  * @file indexeddb index.js
-                                                  * @author clark-t (clarktanglei@163.com)
-                                                  */
+var _indexeddb = __webpack_require__(146);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+self.addEventListener('install', function (e) {
+    (0, _log.log)('Install event');
+
+    if (e.waitUntil) {
+        e.waitUntil((0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
+            var indexeddbScore, indexeddbGetallScore, store, data, score, getallScore;
+            return _regenerator2.default.wrap(function _callee$(_context) {
+                while (1) {
+                    switch (_context.prev = _context.next) {
+                        case 0:
+                            if (!(typeof indexedDB === 'undefined')) {
+                                _context.next = 3;
+                                break;
+                            }
+
+                            (0, _log.log)('sw-indexeddb: indexedDB unsupport');
+                            return _context.abrupt('return');
+
+                        case 3:
+                            indexeddbScore = 0;
+                            indexeddbGetallScore = 0;
+                            _context.next = 7;
+                            return (0, _indexeddb.createStore)({
+                                dbName: 'pwa-features-autotest-indexeddb-sw',
+                                version: '1',
+                                storeName: 'test'
+                            });
+
+                        case 7:
+                            store = _context.sent;
+                            _context.prev = 8;
+                            _context.next = 11;
+                            return store.get('a');
+
+                        case 11:
+                            if (!_context.sent) {
+                                _context.next = 14;
+                                break;
+                            }
+
+                            _context.next = 14;
+                            return store.delete('a');
+
+                        case 14:
+                            data = { key: 'a', value: 'b' };
+                            _context.next = 17;
+                            return store.add(data);
+
+                        case 17:
+                            (0, _log.log)('sw-indexeddb: add data', data);
+
+                            _context.next = 20;
+                            return store.get('a');
+
+                        case 20:
+                            data = _context.sent;
+
+                            (0, _log.log)('sw-indexeddb: get data after add', data);
+
+                            data = { key: 'a', value: 'c' };
+                            _context.next = 25;
+                            return store.put(data);
+
+                        case 25:
+                            (0, _log.log)('sw-indexeddb: put data', data);
+
+                            _context.next = 28;
+                            return store.get('a');
+
+                        case 28:
+                            data = _context.sent;
+
+                            (0, _log.log)('sw-indexeddb: get data after put', data);
+
+                            _context.next = 32;
+                            return store.delete('a');
+
+                        case 32:
+                            (0, _log.log)('sw-indexeddb: delete data');
+
+                            _context.next = 35;
+                            return store.get('a');
+
+                        case 35:
+                            data = _context.sent;
+
+                            (0, _log.log)('sw-indexeddb: get data after delete', data);
+
+                            indexeddbScore = 0.5;
+                            _context.next = 43;
+                            break;
+
+                        case 40:
+                            _context.prev = 40;
+                            _context.t0 = _context['catch'](8);
+
+                            (0, _log.log)('sw-indexeddb: error happen when crud', _context.t0);
+
+                        case 43:
+                            if (!store.getAll) {
+                                _context.next = 57;
+                                break;
+                            }
+
+                            _context.prev = 44;
+                            _context.next = 47;
+                            return _promise2.default.all([store.put({ key: 'a', value: '1' }), store.put({ key: 'b', value: '2' })]);
+
+                        case 47:
+                            _context.next = 49;
+                            return store.getAll();
+
+                        case 49:
+                            indexeddbGetallScore = 0.5;
+
+                            _context.next = 55;
+                            break;
+
+                        case 52:
+                            _context.prev = 52;
+                            _context.t1 = _context['catch'](44);
+
+                            (0, _log.log)('sw-indexeddb: getAll error', _context.t1);
+
+                        case 55:
+                            _context.next = 58;
+                            break;
+
+                        case 57:
+                            (0, _log.log)('sw-indexeddb: getAll unsupport');
+
+                        case 58:
+
+                            (0, _indexeddb.deleteStore)({
+                                dbName: 'pwa-features-autotest-indexeddb-sw'
+                            });
+
+                            _context.next = 61;
+                            return (0, _helper.getGrade)('indexedDB');
+
+                        case 61:
+                            score = _context.sent;
+
+                            (0, _helper.grade)('indexedDB' + score + indexeddbScore);
+                            (0, _log.log)('- indexedDB done -' + score + indexeddbScore);
+
+                            _context.next = 66;
+                            return (0, _helper.getGrade)('indexedDB.getAll');
+
+                        case 66:
+                            getallScore = _context.sent;
+
+                            (0, _helper.grade)('indexedDB.getAll' + getallScore + indexeddbGetallScore);
+                            (0, _log.log)('- indexeddb.getAll done -' + getallScore + indexeddbGetallScore);
+
+                            _context.next = 71;
+                            return (0, _helper.sleep)(1000);
+
+                        case 71:
+
+                            (0, _log.log)('sw-indexeddb: test finish');
+
+                        case 72:
+                        case 'end':
+                            return _context.stop();
+                    }
+                }
+            }, _callee, undefined, [[8, 40], [44, 52]]);
+        }))());
+    }
+
+    self.skipWaiting();
+}); /**
+     * @file sw-indexeddb.js
+     * @author clark-t (clarktanglei@163.com)
+     */
 
 /***/ })
 /******/ ]);

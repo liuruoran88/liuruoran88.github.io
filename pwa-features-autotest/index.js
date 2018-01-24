@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 312);
+/******/ 	return __webpack_require__(__webpack_require__.s = 314);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -445,7 +445,7 @@ module.exports = __webpack_require__(89);
 
 exports.__esModule = true;
 
-var _promise = __webpack_require__(42);
+var _promise = __webpack_require__(41);
 
 var _promise2 = _interopRequireDefault(_promise);
 
@@ -715,13 +715,13 @@ exports.default = typeof _symbol2.default === "function" && _typeof(_iterator2.d
 };
 
 /***/ }),
-/* 41 */,
-/* 42 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = { "default": __webpack_require__(69), __esModule: true };
 
 /***/ }),
+/* 42 */,
 /* 43 */
 /***/ (function(module, exports) {
 
@@ -1293,7 +1293,7 @@ var _typeof2 = __webpack_require__(40);
 
 var _typeof3 = _interopRequireDefault(_typeof2);
 
-var _promise = __webpack_require__(42);
+var _promise = __webpack_require__(41);
 
 var _promise2 = _interopRequireDefault(_promise);
 
@@ -1572,6 +1572,7 @@ exports.limit = limit;
 exports.until = until;
 exports.zero = zero;
 exports.grade = grade;
+exports.getGrade = getGrade;
 exports.createStep = createStep;
 exports.isEmpty = isEmpty;
 exports.isObject = isObject;
@@ -1720,6 +1721,10 @@ function grade(feature, score) {
     }
 
     return _store.featureStore.setItem(feature, score);
+}
+
+function getGrade(feature) {
+    return _store.featureStore.getItem(feature);
 }
 
 function createStep(_ref11) {
@@ -6790,8 +6795,8 @@ function showCaseName(caseName) {
 "use strict";
 
 
-var bind = __webpack_require__(166);
-var isBuffer = __webpack_require__(206);
+var bind = __webpack_require__(167);
+var isBuffer = __webpack_require__(207);
 
 /*global toString:true*/
 
@@ -7583,18 +7588,111 @@ module.exports = {
 /* 143 */,
 /* 144 */,
 /* 145 */,
-/* 146 */,
+/* 146 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _promise = __webpack_require__(41);
+
+var _promise2 = _interopRequireDefault(_promise);
+
+exports.createStore = createStore;
+exports.deleteStore = deleteStore;
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * @file indexeddb indexeddb.js
+ * @author clark-t (clarktanglei@163.com)
+ */
+
+function createStore(_ref) {
+    var _ref$dbName = _ref.dbName,
+        dbName = _ref$dbName === undefined ? 'pwa-features-autotest-indexeddb' : _ref$dbName,
+        _ref$version = _ref.version,
+        version = _ref$version === undefined ? '1' : _ref$version,
+        _ref$storeName = _ref.storeName,
+        storeName = _ref$storeName === undefined ? 'test' : _ref$storeName;
+
+    return new _promise2.default(function (resolve, reject) {
+        var request = indexedDB.open(dbName, version);
+        request.onerror = function (event) {
+            return reject(event);
+        };
+
+        request.onupgradeneeded = function (event) {
+            var db = request.result;
+            if (!db.objectStoreNames.contains(storeName)) {
+                var objectStore = db.createObjectStore(storeName, { keyPath: 'key' });
+                objectStore.createIndex('key', 'key', { unique: true });
+                objectStore.createIndex('value', 'value', { unique: false });
+            }
+        };
+
+        request.onsuccess = function (event) {
+            var db = request.result;
+
+            db.onerror = function (event) {
+                return reject(event);
+            };
+
+            var transaction = db.transaction('test', 'readwrite');
+            var store = transaction.objectStore('test');
+
+            var promisifyStore = ['add', 'get', 'put', 'delete', 'getAll'].reduce(function (obj, key) {
+                if (typeof store[key] === 'function') {
+                    obj[key] = function () {
+                        return promisify(store[key].apply(store, arguments));
+                    };
+                }
+                return obj;
+            }, {});
+
+            resolve(promisifyStore);
+        };
+    });
+}
+
+function deleteStore(_ref2) {
+    var _ref2$dbName = _ref2.dbName,
+        dbName = _ref2$dbName === undefined ? 'pwa-features-autotest-indexeddb' : _ref2$dbName;
+
+    try {
+        indexedDB.deleteDatabase(dbName);
+    } catch (e) {}
+}
+
+function promisify(request) {
+    return new _promise2.default(function (resolve, reject) {
+        request.onsuccess = function (event) {
+            resolve(event.target.result);
+        };
+
+        request.onerror = function (event) {
+            reject(event);
+        };
+    });
+}
+
+/***/ }),
 /* 147 */,
 /* 148 */,
 /* 149 */,
-/* 150 */
+/* 150 */,
+/* 151 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {
 
 var utils = __webpack_require__(122);
-var normalizeHeaderName = __webpack_require__(209);
+var normalizeHeaderName = __webpack_require__(210);
 
 var DEFAULT_CONTENT_TYPE = {
   'Content-Type': 'application/x-www-form-urlencoded'
@@ -7610,10 +7708,10 @@ function getDefaultAdapter() {
   var adapter;
   if (typeof XMLHttpRequest !== 'undefined') {
     // For browsers use XHR adapter
-    adapter = __webpack_require__(167);
+    adapter = __webpack_require__(168);
   } else if (typeof process !== 'undefined') {
     // For node use HTTP adapter
-    adapter = __webpack_require__(167);
+    adapter = __webpack_require__(168);
   }
   return adapter;
 }
@@ -7684,10 +7782,9 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 
 module.exports = defaults;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(208)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(209)))
 
 /***/ }),
-/* 151 */,
 /* 152 */,
 /* 153 */,
 /* 154 */,
@@ -7702,7 +7799,8 @@ module.exports = defaults;
 /* 163 */,
 /* 164 */,
 /* 165 */,
-/* 166 */
+/* 166 */,
+/* 167 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7720,19 +7818,19 @@ module.exports = function bind(fn, thisArg) {
 
 
 /***/ }),
-/* 167 */
+/* 168 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var utils = __webpack_require__(122);
-var settle = __webpack_require__(210);
-var buildURL = __webpack_require__(212);
-var parseHeaders = __webpack_require__(213);
-var isURLSameOrigin = __webpack_require__(214);
-var createError = __webpack_require__(168);
-var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(215);
+var settle = __webpack_require__(211);
+var buildURL = __webpack_require__(213);
+var parseHeaders = __webpack_require__(214);
+var isURLSameOrigin = __webpack_require__(215);
+var createError = __webpack_require__(169);
+var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(216);
 
 module.exports = function xhrAdapter(config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -7829,7 +7927,7 @@ module.exports = function xhrAdapter(config) {
     // This is only done if running in a standard browser environment.
     // Specifically not if we're in a web worker, or react-native.
     if (utils.isStandardBrowserEnv()) {
-      var cookies = __webpack_require__(216);
+      var cookies = __webpack_require__(217);
 
       // Add xsrf header
       var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
@@ -7907,13 +8005,13 @@ module.exports = function xhrAdapter(config) {
 
 
 /***/ }),
-/* 168 */
+/* 169 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var enhanceError = __webpack_require__(211);
+var enhanceError = __webpack_require__(212);
 
 /**
  * Create an Error with the specified message, config, error code, request and response.
@@ -7932,7 +8030,7 @@ module.exports = function createError(message, config, code, request, response) 
 
 
 /***/ }),
-/* 169 */
+/* 170 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7944,7 +8042,7 @@ module.exports = function isCancel(value) {
 
 
 /***/ }),
-/* 170 */
+/* 171 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7970,7 +8068,7 @@ module.exports = Cancel;
 
 
 /***/ }),
-/* 171 */
+/* 172 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8060,7 +8158,7 @@ var CHECK_LIST = ['Cache', 'caches', 'caches.open', 'caches.has', 'caches.keys',
 module.exports = exports['default'];
 
 /***/ }),
-/* 172 */
+/* 173 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8156,7 +8254,7 @@ module.exports = exports['default']; /**
 // import 'whatwg-fetch';
 
 /***/ }),
-/* 173 */
+/* 174 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8227,7 +8325,7 @@ var CHECK_LIST = ['navigator.credentials', 'PasswordCredential', 'FederatedCrede
 module.exports = exports['default'];
 
 /***/ }),
-/* 174 */
+/* 175 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8241,7 +8339,7 @@ var _regenerator = __webpack_require__(23);
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
 
-var _promise = __webpack_require__(42);
+var _promise = __webpack_require__(41);
 
 var _promise2 = _interopRequireDefault(_promise);
 
@@ -8495,7 +8593,7 @@ var CHECK_LIST = ['DeviceOrientationEvent', 'DeviceMotionEvent', 'navigator.geol
 module.exports = exports['default'];
 
 /***/ }),
-/* 175 */
+/* 176 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8509,7 +8607,7 @@ var _regenerator = __webpack_require__(23);
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
 
-var _promise = __webpack_require__(42);
+var _promise = __webpack_require__(41);
 
 var _promise2 = _interopRequireDefault(_promise);
 
@@ -8635,7 +8733,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 module.exports = exports['default'];
 
 /***/ }),
-/* 176 */
+/* 177 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8650,7 +8748,7 @@ var _regenerator = __webpack_require__(23);
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
 
-var _promise = __webpack_require__(42);
+var _promise = __webpack_require__(41);
 
 var _promise2 = _interopRequireDefault(_promise);
 
@@ -8846,7 +8944,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var CHECK_LIST = exports.CHECK_LIST = ['navigator.serviceWorker.getRegistration', 'navigator.serviceWorker.getRegistrations'];
 
 /***/ }),
-/* 177 */
+/* 178 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8861,7 +8959,7 @@ var _regenerator = __webpack_require__(23);
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
 
-var _promise = __webpack_require__(42);
+var _promise = __webpack_require__(41);
 
 var _promise2 = _interopRequireDefault(_promise);
 
@@ -8878,145 +8976,200 @@ exports.default = function (scope) {
             var _this = this;
 
             return (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
-                var store, data, result;
+                var indexeddbScore, indexeddbGetallScore, store, data, result, score, getallScore, reg;
                 return _regenerator2.default.wrap(function _callee$(_context) {
                     while (1) {
                         switch (_context.prev = _context.next) {
                             case 0:
-                                if (!(typeof indexedDB === 'undefined')) {
-                                    _context.next = 3;
+
+                                (0, _log.log)('<< indexedDB test >>');
+
+                                indexeddbScore = 0;
+                                indexeddbGetallScore = 0;
+                                // 主进程的 indexeddb 测试
+
+                                if (!(typeof indexedDB !== 'undefined')) {
+                                    _context.next = 76;
                                     break;
                                 }
 
-                                (0, _log.log)('indexeddb: indexedDB unsupport');
-                                return _context.abrupt('return');
+                                _context.next = 6;
+                                return (0, _indexeddb.createStore)({
+                                    dbName: 'pwa-features-autotest-indexeddb-main',
+                                    version: '1',
+                                    storeName: 'test'
+                                });
 
-                            case 3:
-                                _context.next = 5;
-                                return createStore();
-
-                            case 5:
+                            case 6:
                                 store = _context.sent;
-                                _context.prev = 6;
-                                _context.next = 9;
+                                _context.prev = 7;
+                                _context.next = 10;
                                 return store.get('a');
 
-                            case 9:
+                            case 10:
                                 if (!_context.sent) {
-                                    _context.next = 12;
+                                    _context.next = 13;
                                     break;
                                 }
 
-                                _context.next = 12;
+                                _context.next = 13;
                                 return store.delete('a');
 
-                            case 12:
+                            case 13:
                                 data = { key: 'a', value: 'b' };
-                                _context.next = 15;
+                                _context.next = 16;
                                 return store.add(data);
 
-                            case 15:
+                            case 16:
                                 (0, _log.log)('indexeddb: add data', data);
 
-                                _context.next = 18;
+                                _context.next = 19;
                                 return store.get('a');
 
-                            case 18:
+                            case 19:
                                 data = _context.sent;
 
                                 (0, _log.log)('indexeddb: get data after add', data);
 
                                 data = { key: 'a', value: 'c' };
-                                _context.next = 23;
+                                _context.next = 24;
                                 return store.put(data);
 
-                            case 23:
+                            case 24:
                                 (0, _log.log)('indexeddb: put data', data);
 
-                                _context.next = 26;
+                                _context.next = 27;
                                 return store.get('a');
 
-                            case 26:
+                            case 27:
                                 data = _context.sent;
 
                                 (0, _log.log)('indexeddb: get data after put', data);
 
-                                _context.next = 30;
+                                _context.next = 31;
                                 return store.delete('a');
 
-                            case 30:
+                            case 31:
                                 (0, _log.log)('indexeddb: delete data');
 
-                                _context.next = 33;
+                                _context.next = 34;
                                 return store.get('a');
 
-                            case 33:
+                            case 34:
                                 data = _context.sent;
 
                                 (0, _log.log)('indexeddb: get data after delete', data);
 
-                                (0, _helper.grade)('indexedDB', 1);
-                                _context.next = 41;
+                                indexeddbScore = 0.5;
+                                _context.next = 42;
                                 break;
 
-                            case 38:
-                                _context.prev = 38;
-                                _context.t0 = _context['catch'](6);
+                            case 39:
+                                _context.prev = 39;
+                                _context.t0 = _context['catch'](7);
 
                                 (0, _log.log)('indexeddb: error happen when crud', _context.t0);
 
-                            case 41:
+                            case 42:
+
+                                (0, _log.log)('indexeddb: getAll start', store, store.getAll);
+
                                 if (!store.getAll) {
-                                    _context.next = 57;
+                                    _context.next = 61;
                                     break;
                                 }
 
-                                _context.prev = 42;
-                                _context.next = 45;
+                                (0, _log.log)('indexeddb: getAll start');
+                                _context.prev = 45;
+
+                                (0, _log.log)('indexeddb: getAll in');
+                                _context.next = 49;
                                 return _promise2.default.all([store.put({ key: 'a', value: '1' }), store.put({ key: 'b', value: '2' })]);
 
-                            case 45:
-                                _context.next = 47;
+                            case 49:
+                                _context.next = 51;
                                 return store.getAll();
 
-                            case 47:
+                            case 51:
                                 result = _context.sent;
 
-                                (0, _helper.grade)('indexedDB.getAll', 1);
+                                indexeddbGetallScore = 0.5;
                                 (0, _log.log)('indexeddb: getAll', result);
-                                _context.next = 55;
+                                _context.next = 59;
                                 break;
 
-                            case 52:
-                                _context.prev = 52;
-                                _context.t1 = _context['catch'](42);
+                            case 56:
+                                _context.prev = 56;
+                                _context.t1 = _context['catch'](45);
 
                                 (0, _log.log)('indexeddb: getAll error', _context.t1);
 
-                            case 55:
-                                _context.next = 58;
+                            case 59:
+                                _context.next = 62;
                                 break;
 
-                            case 57:
+                            case 61:
                                 (0, _log.log)('indexeddb: getAll unsupport');
 
-                            case 58:
+                            case 62:
 
-                                deleteStore();
+                                (0, _indexeddb.deleteStore)({
+                                    dbName: 'pwa-features-autotest-indexeddb-main'
+                                });
 
-                                _context.next = 61;
-                                return (0, _helper.sleep)(1000);
+                                _context.next = 65;
+                                return (0, _helper.getGrade)('indexedDB');
 
-                            case 61:
+                            case 65:
+                                score = _context.sent;
+
+                                (0, _helper.grade)('indexedDB', score + indexeddbScore);
+                                (0, _log.log)('- indexedDB done -', score + indexeddbScore);
+
+                                _context.next = 70;
+                                return (0, _helper.getGrade)('indexedDB.getAll');
+
+                            case 70:
+                                getallScore = _context.sent;
+
+                                (0, _helper.grade)('indexedDB.getAll', getallScore + indexeddbGetallScore);
+                                (0, _log.log)('- indexeddb.getAll done -', getallScore + indexeddbGetallScore);
+
+                                (0, _log.log)('indexeddb-main: test-finished');
+                                _context.next = 77;
+                                break;
+
+                            case 76:
+                                (0, _log.log)('indexeddb-main: unsupport');
+
+                            case 77:
+                                if (navigator.serviceWorker) {
+                                    _context.next = 79;
+                                    break;
+                                }
+
+                                return _context.abrupt('return');
+
+                            case 79:
+                                (0, _log.log)('indexeddb-sw: register');
+                                _context.next = 82;
+                                return (0, _helper.register)(scope + 'sw-indexeddb.js', scope);
+
+                            case 82:
+                                reg = _context.sent;
+                                _context.next = 85;
+                                return (0, _helper.sleep)(5000);
+
+                            case 85:
 
                                 (0, _log.log)('indexeddb: test finish');
 
-                            case 62:
+                            case 86:
                             case 'end':
                                 return _context.stop();
                         }
                     }
-                }, _callee, _this, [[6, 38], [42, 52]]);
+                }, _callee, _this, [[7, 39], [45, 56]]);
             }))();
         }
     };
@@ -9026,79 +9179,17 @@ var _helper = __webpack_require__(62);
 
 var _log = __webpack_require__(63);
 
+var _indexeddb = __webpack_require__(146);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/**
- * @file indexeddb index.js
- * @author clark-t (clarktanglei@163.com)
- */
-
-var CHECK_LIST = exports.CHECK_LIST = ['indexedDB', 'indexedDB.getAll'];
-
-var DB_NAME = 'pwa-features-autotest-indexeddb';
-var VERSION = 1;
-var STORE_NAME = 'test';
-
-function createStore() {
-    return new _promise2.default(function (resolve, reject) {
-        var request = indexedDB.open(DB_NAME, VERSION);
-        request.onerror = function (event) {
-            return reject(event);
-        };
-
-        request.onupgradeneeded = function (event) {
-            var db = request.result;
-            if (!db.objectStoreNames.contains(STORE_NAME)) {
-                var objectStore = db.createObjectStore(STORE_NAME, { keyPath: 'key' });
-                objectStore.createIndex('key', 'key', { unique: true });
-                objectStore.createIndex('value', 'value', { unique: false });
-            }
-        };
-
-        request.onsuccess = function (event) {
-            var db = request.result;
-
-            db.onerror = function (event) {
-                return reject(event);
-            };
-
-            var transaction = db.transaction('test', 'readwrite');
-            var store = transaction.objectStore('test');
-
-            var promisifyStore = ['add', 'get', 'put', 'delete', 'getAll'].reduce(function (obj, key) {
-                if (typeof store[key] === 'function') {
-                    obj[key] = function () {
-                        return promisify(store[key].apply(store, arguments));
-                    };
-                }
-                return obj;
-            }, {});
-
-            resolve(promisifyStore);
-        };
-    });
-}
-
-function deleteStore() {
-    try {
-        indexedDB.deleteDatabase(DB_NAME);
-    } catch (e) {}
-}
-
-function promisify(request) {
-    return new _promise2.default(function (resolve, reject) {
-        request.onsuccess = function (event) {
-            resolve(event.target.result);
-        };
-
-        request.onerror = function (event) {
-            reject(event);
-        };
-    });
-}
+var CHECK_LIST = exports.CHECK_LIST = ['indexedDB', 'indexedDB.getAll']; /**
+                                                                          * @file indexeddb index.js
+                                                                          * @author clark-t (clarktanglei@163.com)
+                                                                          */
 
 /***/ }),
-/* 178 */
+/* 179 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9306,7 +9397,7 @@ var CHECK_LIST = [
 module.exports = exports['default'];
 
 /***/ }),
-/* 179 */
+/* 180 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9320,7 +9411,7 @@ var _regenerator = __webpack_require__(23);
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
 
-var _promise = __webpack_require__(42);
+var _promise = __webpack_require__(41);
 
 var _promise2 = _interopRequireDefault(_promise);
 
@@ -9518,7 +9609,7 @@ var CHECK_LIST = ['Notification', 'notification.requestPermission', 'showNotific
 module.exports = exports['default'];
 
 /***/ }),
-/* 180 */
+/* 181 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9690,7 +9781,7 @@ var OPTIONS = {};
 module.exports = exports['default'];
 
 /***/ }),
-/* 181 */
+/* 182 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9704,7 +9795,7 @@ var _regenerator = __webpack_require__(23);
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
 
-var _promise = __webpack_require__(42);
+var _promise = __webpack_require__(41);
 
 var _promise2 = _interopRequireDefault(_promise);
 
@@ -9956,7 +10047,7 @@ var ch = void 0;
 module.exports = exports['default'];
 
 /***/ }),
-/* 182 */
+/* 183 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9970,7 +10061,7 @@ var _regenerator = __webpack_require__(23);
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
 
-var _promise = __webpack_require__(42);
+var _promise = __webpack_require__(41);
 
 var _promise2 = _interopRequireDefault(_promise);
 
@@ -10310,7 +10401,7 @@ function urlB64ToUint8Array(base64String) {
 module.exports = exports['default'];
 
 /***/ }),
-/* 183 */
+/* 184 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10443,10 +10534,10 @@ var CHECK_LIST = ['syncEvent'];
 module.exports = exports['default'];
 
 /***/ }),
-/* 184 */,
 /* 185 */,
 /* 186 */,
-/* 187 */
+/* 187 */,
+/* 188 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10485,7 +10576,6 @@ var featureKeys = exports.featureKeys = {
 var uaKeys = exports.uaKeys = ['browser', 'os', 'device', 'ua'];
 
 /***/ }),
-/* 188 */,
 /* 189 */,
 /* 190 */,
 /* 191 */,
@@ -10499,7 +10589,8 @@ var uaKeys = exports.uaKeys = ['browser', 'os', 'device', 'ua'];
 /* 199 */,
 /* 200 */,
 /* 201 */,
-/* 202 */
+/* 202 */,
+/* 203 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10513,7 +10604,7 @@ var _stringify = __webpack_require__(64);
 
 var _stringify2 = _interopRequireDefault(_stringify);
 
-var _promise = __webpack_require__(42);
+var _promise = __webpack_require__(41);
 
 var _promise2 = _interopRequireDefault(_promise);
 
@@ -10594,9 +10685,9 @@ var uaParse = function () {
 
 exports.refreshCommon = refreshCommon;
 
-__webpack_require__(203);
+__webpack_require__(204);
 
-var _axios = __webpack_require__(204);
+var _axios = __webpack_require__(205);
 
 var _axios2 = _interopRequireDefault(_axios);
 
@@ -10604,9 +10695,9 @@ var _store = __webpack_require__(59);
 
 var _helper = __webpack_require__(62);
 
-var _featureList = __webpack_require__(187);
+var _featureList = __webpack_require__(188);
 
-var _uaParserJs = __webpack_require__(224);
+var _uaParserJs = __webpack_require__(225);
 
 var _uaParserJs2 = _interopRequireDefault(_uaParserJs);
 
@@ -10853,28 +10944,28 @@ function toast(msg) {
 }
 
 /***/ }),
-/* 203 */
+/* 204 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 204 */
+/* 205 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(205);
+module.exports = __webpack_require__(206);
 
 /***/ }),
-/* 205 */
+/* 206 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var utils = __webpack_require__(122);
-var bind = __webpack_require__(166);
-var Axios = __webpack_require__(207);
-var defaults = __webpack_require__(150);
+var bind = __webpack_require__(167);
+var Axios = __webpack_require__(208);
+var defaults = __webpack_require__(151);
 
 /**
  * Create an instance of Axios
@@ -10907,15 +10998,15 @@ axios.create = function create(instanceConfig) {
 };
 
 // Expose Cancel & CancelToken
-axios.Cancel = __webpack_require__(170);
-axios.CancelToken = __webpack_require__(222);
-axios.isCancel = __webpack_require__(169);
+axios.Cancel = __webpack_require__(171);
+axios.CancelToken = __webpack_require__(223);
+axios.isCancel = __webpack_require__(170);
 
 // Expose all/spread
 axios.all = function all(promises) {
   return Promise.all(promises);
 };
-axios.spread = __webpack_require__(223);
+axios.spread = __webpack_require__(224);
 
 module.exports = axios;
 
@@ -10924,7 +11015,7 @@ module.exports.default = axios;
 
 
 /***/ }),
-/* 206 */
+/* 207 */
 /***/ (function(module, exports) {
 
 /*!
@@ -10951,18 +11042,18 @@ function isSlowBuffer (obj) {
 
 
 /***/ }),
-/* 207 */
+/* 208 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var defaults = __webpack_require__(150);
+var defaults = __webpack_require__(151);
 var utils = __webpack_require__(122);
-var InterceptorManager = __webpack_require__(217);
-var dispatchRequest = __webpack_require__(218);
-var isAbsoluteURL = __webpack_require__(220);
-var combineURLs = __webpack_require__(221);
+var InterceptorManager = __webpack_require__(218);
+var dispatchRequest = __webpack_require__(219);
+var isAbsoluteURL = __webpack_require__(221);
+var combineURLs = __webpack_require__(222);
 
 /**
  * Create a new instance of Axios
@@ -11044,7 +11135,7 @@ module.exports = Axios;
 
 
 /***/ }),
-/* 208 */
+/* 209 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -11234,7 +11325,7 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 209 */
+/* 210 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11253,13 +11344,13 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 
 
 /***/ }),
-/* 210 */
+/* 211 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var createError = __webpack_require__(168);
+var createError = __webpack_require__(169);
 
 /**
  * Resolve or reject a Promise based on response status.
@@ -11286,7 +11377,7 @@ module.exports = function settle(resolve, reject, response) {
 
 
 /***/ }),
-/* 211 */
+/* 212 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11314,7 +11405,7 @@ module.exports = function enhanceError(error, config, code, request, response) {
 
 
 /***/ }),
-/* 212 */
+/* 213 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11389,7 +11480,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 
 
 /***/ }),
-/* 213 */
+/* 214 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11433,7 +11524,7 @@ module.exports = function parseHeaders(headers) {
 
 
 /***/ }),
-/* 214 */
+/* 215 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11508,7 +11599,7 @@ module.exports = (
 
 
 /***/ }),
-/* 215 */
+/* 216 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11551,7 +11642,7 @@ module.exports = btoa;
 
 
 /***/ }),
-/* 216 */
+/* 217 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11611,7 +11702,7 @@ module.exports = (
 
 
 /***/ }),
-/* 217 */
+/* 218 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11670,16 +11761,16 @@ module.exports = InterceptorManager;
 
 
 /***/ }),
-/* 218 */
+/* 219 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var utils = __webpack_require__(122);
-var transformData = __webpack_require__(219);
-var isCancel = __webpack_require__(169);
-var defaults = __webpack_require__(150);
+var transformData = __webpack_require__(220);
+var isCancel = __webpack_require__(170);
+var defaults = __webpack_require__(151);
 
 /**
  * Throws a `Cancel` if cancellation has been requested.
@@ -11756,7 +11847,7 @@ module.exports = function dispatchRequest(config) {
 
 
 /***/ }),
-/* 219 */
+/* 220 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11783,7 +11874,7 @@ module.exports = function transformData(data, headers, fns) {
 
 
 /***/ }),
-/* 220 */
+/* 221 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11804,7 +11895,7 @@ module.exports = function isAbsoluteURL(url) {
 
 
 /***/ }),
-/* 221 */
+/* 222 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11825,13 +11916,13 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 
 
 /***/ }),
-/* 222 */
+/* 223 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var Cancel = __webpack_require__(170);
+var Cancel = __webpack_require__(171);
 
 /**
  * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -11889,7 +11980,7 @@ module.exports = CancelToken;
 
 
 /***/ }),
-/* 223 */
+/* 224 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11923,7 +12014,7 @@ module.exports = function spread(callback) {
 
 
 /***/ }),
-/* 224 */
+/* 225 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -12966,7 +13057,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/**
         exports.UAParser = UAParser;
     } else {
         // requirejs env (optional)
-        if ("function" === FUNC_TYPE && __webpack_require__(225)) {
+        if ("function" === FUNC_TYPE && __webpack_require__(226)) {
             !(__WEBPACK_AMD_DEFINE_RESULT__ = (function () {
                 return UAParser;
             }).call(exports, __webpack_require__, exports, module),
@@ -13002,39 +13093,13 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/**
 
 
 /***/ }),
-/* 225 */
+/* 226 */
 /***/ (function(module, exports) {
 
 /* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
 module.exports = __webpack_amd_options__;
 
 /* WEBPACK VAR INJECTION */}.call(exports, {}))
-
-/***/ }),
-/* 226 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _base = __webpack_require__(117);
-
-var _demo = __webpack_require__(171);
-
-var _demo2 = _interopRequireDefault(_demo);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * @file cache-test by iframe
- * @author ruoran (liuruoran@baidu.com)
- */
-
-var SCOPE = "/pwa-features-autotest" + '/cases/cache/';
-
-// let case = caseCreator(SCOPE);
-
-(0, _base.run)((0, _demo2.default)(SCOPE));
 
 /***/ }),
 /* 227 */
@@ -13052,11 +13117,11 @@ var _demo2 = _interopRequireDefault(_demo);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
- * @file fetch & fetchEvent test
- * @author clark-t (clarktanglei@163.com)
+ * @file cache-test by iframe
+ * @author ruoran (liuruoran@baidu.com)
  */
 
-var SCOPE = "/pwa-features-autotest" + '/cases/client/';
+var SCOPE = "/pwa-features-autotest" + '/cases/cache/';
 
 // let case = caseCreator(SCOPE);
 
@@ -13104,11 +13169,11 @@ var _demo2 = _interopRequireDefault(_demo);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
- * @file deviceapi-test-test by iframe
- * @author ruoran (liuruoran@baidu.com)
+ * @file fetch & fetchEvent test
+ * @author clark-t (clarktanglei@163.com)
  */
 
-var SCOPE = "/pwa-features-autotest" + '/cases/deviceapi/';
+var SCOPE = "/pwa-features-autotest" + '/cases/client/';
 
 // let case = caseCreator(SCOPE);
 
@@ -13130,11 +13195,11 @@ var _demo2 = _interopRequireDefault(_demo);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
- * @file fetch & fetchEvent test
- * @author clark-t (clarktanglei@163.com)
+ * @file deviceapi-test-test by iframe
+ * @author ruoran (liuruoran@baidu.com)
  */
 
-var SCOPE = "/pwa-features-autotest" + '/cases/fetch/';
+var SCOPE = "/pwa-features-autotest" + '/cases/deviceapi/';
 
 // let case = caseCreator(SCOPE);
 
@@ -13156,11 +13221,11 @@ var _demo2 = _interopRequireDefault(_demo);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
- * @file getregistration by iframe
+ * @file fetch & fetchEvent test
  * @author clark-t (clarktanglei@163.com)
  */
 
-var SCOPE = "/pwa-features-autotest" + '/cases/getregistration/';
+var SCOPE = "/pwa-features-autotest" + '/cases/fetch/';
 
 // let case = caseCreator(SCOPE);
 
@@ -13182,11 +13247,11 @@ var _demo2 = _interopRequireDefault(_demo);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
- * @file indexeddb-test by iframe
+ * @file getregistration by iframe
  * @author clark-t (clarktanglei@163.com)
  */
 
-var SCOPE = "/pwa-features-autotest" + '/cases/indexeddb/';
+var SCOPE = "/pwa-features-autotest" + '/cases/getregistration/';
 
 // let case = caseCreator(SCOPE);
 
@@ -13208,10 +13273,13 @@ var _demo2 = _interopRequireDefault(_demo);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
- * @file lifecycle-test by iframe
- * @author ruoran (liuruoran@baidu.com)
+ * @file indexeddb-test by iframe
+ * @author clark-t (clarktanglei@163.com)
  */
-var SCOPE = "/pwa-features-autotest" + '/cases/lifecycle/';
+
+var SCOPE = "/pwa-features-autotest" + '/cases/indexeddb/';
+
+// let case = caseCreator(SCOPE);
 
 (0, _base.run)((0, _demo2.default)(SCOPE));
 
@@ -13231,13 +13299,10 @@ var _demo2 = _interopRequireDefault(_demo);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
- * @file notification-test by iframe
+ * @file lifecycle-test by iframe
  * @author ruoran (liuruoran@baidu.com)
  */
-
-var SCOPE = "/pwa-features-autotest" + '/cases/notification/';
-
-// let case = caseCreator(SCOPE);
+var SCOPE = "/pwa-features-autotest" + '/cases/lifecycle/';
 
 (0, _base.run)((0, _demo2.default)(SCOPE));
 
@@ -13257,11 +13322,11 @@ var _demo2 = _interopRequireDefault(_demo);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
- * @file payment-test by iframe
+ * @file notification-test by iframe
  * @author ruoran (liuruoran@baidu.com)
  */
 
-var SCOPE = "/pwa-features-autotest" + '/cases/payment/';
+var SCOPE = "/pwa-features-autotest" + '/cases/notification/';
 
 // let case = caseCreator(SCOPE);
 
@@ -13283,11 +13348,11 @@ var _demo2 = _interopRequireDefault(_demo);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
- * @file postmessage-test by iframe
+ * @file payment-test by iframe
  * @author ruoran (liuruoran@baidu.com)
  */
 
-var SCOPE = "/pwa-features-autotest" + '/cases/postmessage/';
+var SCOPE = "/pwa-features-autotest" + '/cases/payment/';
 
 // let case = caseCreator(SCOPE);
 
@@ -13309,11 +13374,11 @@ var _demo2 = _interopRequireDefault(_demo);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
- * @file sync-test by iframe
+ * @file postmessage-test by iframe
  * @author ruoran (liuruoran@baidu.com)
  */
 
-var SCOPE = "/pwa-features-autotest" + '/cases/push/';
+var SCOPE = "/pwa-features-autotest" + '/cases/postmessage/';
 
 // let case = caseCreator(SCOPE);
 
@@ -13339,6 +13404,32 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @author ruoran (liuruoran@baidu.com)
  */
 
+var SCOPE = "/pwa-features-autotest" + '/cases/push/';
+
+// let case = caseCreator(SCOPE);
+
+(0, _base.run)((0, _demo2.default)(SCOPE));
+
+/***/ }),
+/* 239 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _base = __webpack_require__(117);
+
+var _demo = __webpack_require__(184);
+
+var _demo2 = _interopRequireDefault(_demo);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * @file sync-test by iframe
+ * @author ruoran (liuruoran@baidu.com)
+ */
+
 var SCOPE = "/pwa-features-autotest" + '/cases/sync/';
 
 // let case = caseCreator(SCOPE);
@@ -13346,7 +13437,6 @@ var SCOPE = "/pwa-features-autotest" + '/cases/sync/';
 (0, _base.run)((0, _demo2.default)(SCOPE));
 
 /***/ }),
-/* 239 */,
 /* 240 */,
 /* 241 */,
 /* 242 */,
@@ -13419,15 +13509,17 @@ var SCOPE = "/pwa-features-autotest" + '/cases/sync/';
 /* 309 */,
 /* 310 */,
 /* 311 */,
-/* 312 */
+/* 312 */,
+/* 313 */,
+/* 314 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _common = __webpack_require__(202);
+var _common = __webpack_require__(203);
 
-var files = __webpack_require__(313); /**
+var files = __webpack_require__(315); /**
                                                               * @file client entry js file
                                                               * @author clark-t (clarktanglei@163.com)
                                                               */
@@ -13462,23 +13554,23 @@ function test(src) {
 }
 
 /***/ }),
-/* 313 */
+/* 315 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./cache/index.js": 226,
-	"./client/index.js": 227,
-	"./credentials/index.js": 228,
-	"./deviceapi/index.js": 229,
-	"./fetch/index.js": 230,
-	"./getregistration/index.js": 231,
-	"./indexeddb/index.js": 232,
-	"./lifecycle/index.js": 233,
-	"./notification/index.js": 234,
-	"./payment/index.js": 235,
-	"./postmessage/index.js": 236,
-	"./push/index.js": 237,
-	"./sync/index.js": 238
+	"./cache/index.js": 227,
+	"./client/index.js": 228,
+	"./credentials/index.js": 229,
+	"./deviceapi/index.js": 230,
+	"./fetch/index.js": 231,
+	"./getregistration/index.js": 232,
+	"./indexeddb/index.js": 233,
+	"./lifecycle/index.js": 234,
+	"./notification/index.js": 235,
+	"./payment/index.js": 236,
+	"./postmessage/index.js": 237,
+	"./push/index.js": 238,
+	"./sync/index.js": 239
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -13494,7 +13586,7 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 313;
+webpackContext.id = 315;
 
 /***/ })
 /******/ ]);

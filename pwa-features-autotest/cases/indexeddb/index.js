@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 232);
+/******/ 	return __webpack_require__(__webpack_require__.s = 233);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -445,7 +445,7 @@ module.exports = __webpack_require__(89);
 
 exports.__esModule = true;
 
-var _promise = __webpack_require__(42);
+var _promise = __webpack_require__(41);
 
 var _promise2 = _interopRequireDefault(_promise);
 
@@ -715,13 +715,13 @@ exports.default = typeof _symbol2.default === "function" && _typeof(_iterator2.d
 };
 
 /***/ }),
-/* 41 */,
-/* 42 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = { "default": __webpack_require__(69), __esModule: true };
 
 /***/ }),
+/* 42 */,
 /* 43 */
 /***/ (function(module, exports) {
 
@@ -1293,7 +1293,7 @@ var _typeof2 = __webpack_require__(40);
 
 var _typeof3 = _interopRequireDefault(_typeof2);
 
-var _promise = __webpack_require__(42);
+var _promise = __webpack_require__(41);
 
 var _promise2 = _interopRequireDefault(_promise);
 
@@ -1572,6 +1572,7 @@ exports.limit = limit;
 exports.until = until;
 exports.zero = zero;
 exports.grade = grade;
+exports.getGrade = getGrade;
 exports.createStep = createStep;
 exports.isEmpty = isEmpty;
 exports.isObject = isObject;
@@ -1720,6 +1721,10 @@ function grade(feature, score) {
     }
 
     return _store.featureStore.setItem(feature, score);
+}
+
+function getGrade(feature) {
+    return _store.featureStore.getItem(feature);
 }
 
 function createStep(_ref11) {
@@ -6808,7 +6813,99 @@ function showCaseName(caseName) {
 /* 143 */,
 /* 144 */,
 /* 145 */,
-/* 146 */,
+/* 146 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _promise = __webpack_require__(41);
+
+var _promise2 = _interopRequireDefault(_promise);
+
+exports.createStore = createStore;
+exports.deleteStore = deleteStore;
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * @file indexeddb indexeddb.js
+ * @author clark-t (clarktanglei@163.com)
+ */
+
+function createStore(_ref) {
+    var _ref$dbName = _ref.dbName,
+        dbName = _ref$dbName === undefined ? 'pwa-features-autotest-indexeddb' : _ref$dbName,
+        _ref$version = _ref.version,
+        version = _ref$version === undefined ? '1' : _ref$version,
+        _ref$storeName = _ref.storeName,
+        storeName = _ref$storeName === undefined ? 'test' : _ref$storeName;
+
+    return new _promise2.default(function (resolve, reject) {
+        var request = indexedDB.open(dbName, version);
+        request.onerror = function (event) {
+            return reject(event);
+        };
+
+        request.onupgradeneeded = function (event) {
+            var db = request.result;
+            if (!db.objectStoreNames.contains(storeName)) {
+                var objectStore = db.createObjectStore(storeName, { keyPath: 'key' });
+                objectStore.createIndex('key', 'key', { unique: true });
+                objectStore.createIndex('value', 'value', { unique: false });
+            }
+        };
+
+        request.onsuccess = function (event) {
+            var db = request.result;
+
+            db.onerror = function (event) {
+                return reject(event);
+            };
+
+            var transaction = db.transaction('test', 'readwrite');
+            var store = transaction.objectStore('test');
+
+            var promisifyStore = ['add', 'get', 'put', 'delete', 'getAll'].reduce(function (obj, key) {
+                if (typeof store[key] === 'function') {
+                    obj[key] = function () {
+                        return promisify(store[key].apply(store, arguments));
+                    };
+                }
+                return obj;
+            }, {});
+
+            resolve(promisifyStore);
+        };
+    });
+}
+
+function deleteStore(_ref2) {
+    var _ref2$dbName = _ref2.dbName,
+        dbName = _ref2$dbName === undefined ? 'pwa-features-autotest-indexeddb' : _ref2$dbName;
+
+    try {
+        indexedDB.deleteDatabase(dbName);
+    } catch (e) {}
+}
+
+function promisify(request) {
+    return new _promise2.default(function (resolve, reject) {
+        request.onsuccess = function (event) {
+            resolve(event.target.result);
+        };
+
+        request.onerror = function (event) {
+            reject(event);
+        };
+    });
+}
+
+/***/ }),
 /* 147 */,
 /* 148 */,
 /* 149 */,
@@ -6839,7 +6936,8 @@ function showCaseName(caseName) {
 /* 174 */,
 /* 175 */,
 /* 176 */,
-/* 177 */
+/* 177 */,
+/* 178 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6854,7 +6952,7 @@ var _regenerator = __webpack_require__(23);
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
 
-var _promise = __webpack_require__(42);
+var _promise = __webpack_require__(41);
 
 var _promise2 = _interopRequireDefault(_promise);
 
@@ -6871,145 +6969,200 @@ exports.default = function (scope) {
             var _this = this;
 
             return (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
-                var store, data, result;
+                var indexeddbScore, indexeddbGetallScore, store, data, result, score, getallScore, reg;
                 return _regenerator2.default.wrap(function _callee$(_context) {
                     while (1) {
                         switch (_context.prev = _context.next) {
                             case 0:
-                                if (!(typeof indexedDB === 'undefined')) {
-                                    _context.next = 3;
+
+                                (0, _log.log)('<< indexedDB test >>');
+
+                                indexeddbScore = 0;
+                                indexeddbGetallScore = 0;
+                                // 主进程的 indexeddb 测试
+
+                                if (!(typeof indexedDB !== 'undefined')) {
+                                    _context.next = 76;
                                     break;
                                 }
 
-                                (0, _log.log)('indexeddb: indexedDB unsupport');
-                                return _context.abrupt('return');
+                                _context.next = 6;
+                                return (0, _indexeddb.createStore)({
+                                    dbName: 'pwa-features-autotest-indexeddb-main',
+                                    version: '1',
+                                    storeName: 'test'
+                                });
 
-                            case 3:
-                                _context.next = 5;
-                                return createStore();
-
-                            case 5:
+                            case 6:
                                 store = _context.sent;
-                                _context.prev = 6;
-                                _context.next = 9;
+                                _context.prev = 7;
+                                _context.next = 10;
                                 return store.get('a');
 
-                            case 9:
+                            case 10:
                                 if (!_context.sent) {
-                                    _context.next = 12;
+                                    _context.next = 13;
                                     break;
                                 }
 
-                                _context.next = 12;
+                                _context.next = 13;
                                 return store.delete('a');
 
-                            case 12:
+                            case 13:
                                 data = { key: 'a', value: 'b' };
-                                _context.next = 15;
+                                _context.next = 16;
                                 return store.add(data);
 
-                            case 15:
+                            case 16:
                                 (0, _log.log)('indexeddb: add data', data);
 
-                                _context.next = 18;
+                                _context.next = 19;
                                 return store.get('a');
 
-                            case 18:
+                            case 19:
                                 data = _context.sent;
 
                                 (0, _log.log)('indexeddb: get data after add', data);
 
                                 data = { key: 'a', value: 'c' };
-                                _context.next = 23;
+                                _context.next = 24;
                                 return store.put(data);
 
-                            case 23:
+                            case 24:
                                 (0, _log.log)('indexeddb: put data', data);
 
-                                _context.next = 26;
+                                _context.next = 27;
                                 return store.get('a');
 
-                            case 26:
+                            case 27:
                                 data = _context.sent;
 
                                 (0, _log.log)('indexeddb: get data after put', data);
 
-                                _context.next = 30;
+                                _context.next = 31;
                                 return store.delete('a');
 
-                            case 30:
+                            case 31:
                                 (0, _log.log)('indexeddb: delete data');
 
-                                _context.next = 33;
+                                _context.next = 34;
                                 return store.get('a');
 
-                            case 33:
+                            case 34:
                                 data = _context.sent;
 
                                 (0, _log.log)('indexeddb: get data after delete', data);
 
-                                (0, _helper.grade)('indexedDB', 1);
-                                _context.next = 41;
+                                indexeddbScore = 0.5;
+                                _context.next = 42;
                                 break;
 
-                            case 38:
-                                _context.prev = 38;
-                                _context.t0 = _context['catch'](6);
+                            case 39:
+                                _context.prev = 39;
+                                _context.t0 = _context['catch'](7);
 
                                 (0, _log.log)('indexeddb: error happen when crud', _context.t0);
 
-                            case 41:
+                            case 42:
+
+                                (0, _log.log)('indexeddb: getAll start', store, store.getAll);
+
                                 if (!store.getAll) {
-                                    _context.next = 57;
+                                    _context.next = 61;
                                     break;
                                 }
 
-                                _context.prev = 42;
-                                _context.next = 45;
+                                (0, _log.log)('indexeddb: getAll start');
+                                _context.prev = 45;
+
+                                (0, _log.log)('indexeddb: getAll in');
+                                _context.next = 49;
                                 return _promise2.default.all([store.put({ key: 'a', value: '1' }), store.put({ key: 'b', value: '2' })]);
 
-                            case 45:
-                                _context.next = 47;
+                            case 49:
+                                _context.next = 51;
                                 return store.getAll();
 
-                            case 47:
+                            case 51:
                                 result = _context.sent;
 
-                                (0, _helper.grade)('indexedDB.getAll', 1);
+                                indexeddbGetallScore = 0.5;
                                 (0, _log.log)('indexeddb: getAll', result);
-                                _context.next = 55;
+                                _context.next = 59;
                                 break;
 
-                            case 52:
-                                _context.prev = 52;
-                                _context.t1 = _context['catch'](42);
+                            case 56:
+                                _context.prev = 56;
+                                _context.t1 = _context['catch'](45);
 
                                 (0, _log.log)('indexeddb: getAll error', _context.t1);
 
-                            case 55:
-                                _context.next = 58;
+                            case 59:
+                                _context.next = 62;
                                 break;
 
-                            case 57:
+                            case 61:
                                 (0, _log.log)('indexeddb: getAll unsupport');
 
-                            case 58:
+                            case 62:
 
-                                deleteStore();
+                                (0, _indexeddb.deleteStore)({
+                                    dbName: 'pwa-features-autotest-indexeddb-main'
+                                });
 
-                                _context.next = 61;
-                                return (0, _helper.sleep)(1000);
+                                _context.next = 65;
+                                return (0, _helper.getGrade)('indexedDB');
 
-                            case 61:
+                            case 65:
+                                score = _context.sent;
+
+                                (0, _helper.grade)('indexedDB', score + indexeddbScore);
+                                (0, _log.log)('- indexedDB done -', score + indexeddbScore);
+
+                                _context.next = 70;
+                                return (0, _helper.getGrade)('indexedDB.getAll');
+
+                            case 70:
+                                getallScore = _context.sent;
+
+                                (0, _helper.grade)('indexedDB.getAll', getallScore + indexeddbGetallScore);
+                                (0, _log.log)('- indexeddb.getAll done -', getallScore + indexeddbGetallScore);
+
+                                (0, _log.log)('indexeddb-main: test-finished');
+                                _context.next = 77;
+                                break;
+
+                            case 76:
+                                (0, _log.log)('indexeddb-main: unsupport');
+
+                            case 77:
+                                if (navigator.serviceWorker) {
+                                    _context.next = 79;
+                                    break;
+                                }
+
+                                return _context.abrupt('return');
+
+                            case 79:
+                                (0, _log.log)('indexeddb-sw: register');
+                                _context.next = 82;
+                                return (0, _helper.register)(scope + 'sw-indexeddb.js', scope);
+
+                            case 82:
+                                reg = _context.sent;
+                                _context.next = 85;
+                                return (0, _helper.sleep)(5000);
+
+                            case 85:
 
                                 (0, _log.log)('indexeddb: test finish');
 
-                            case 62:
+                            case 86:
                             case 'end':
                                 return _context.stop();
                         }
                     }
-                }, _callee, _this, [[6, 38], [42, 52]]);
+                }, _callee, _this, [[7, 39], [45, 56]]);
             }))();
         }
     };
@@ -7019,79 +7172,16 @@ var _helper = __webpack_require__(62);
 
 var _log = __webpack_require__(63);
 
+var _indexeddb = __webpack_require__(146);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/**
- * @file indexeddb index.js
- * @author clark-t (clarktanglei@163.com)
- */
-
-var CHECK_LIST = exports.CHECK_LIST = ['indexedDB', 'indexedDB.getAll'];
-
-var DB_NAME = 'pwa-features-autotest-indexeddb';
-var VERSION = 1;
-var STORE_NAME = 'test';
-
-function createStore() {
-    return new _promise2.default(function (resolve, reject) {
-        var request = indexedDB.open(DB_NAME, VERSION);
-        request.onerror = function (event) {
-            return reject(event);
-        };
-
-        request.onupgradeneeded = function (event) {
-            var db = request.result;
-            if (!db.objectStoreNames.contains(STORE_NAME)) {
-                var objectStore = db.createObjectStore(STORE_NAME, { keyPath: 'key' });
-                objectStore.createIndex('key', 'key', { unique: true });
-                objectStore.createIndex('value', 'value', { unique: false });
-            }
-        };
-
-        request.onsuccess = function (event) {
-            var db = request.result;
-
-            db.onerror = function (event) {
-                return reject(event);
-            };
-
-            var transaction = db.transaction('test', 'readwrite');
-            var store = transaction.objectStore('test');
-
-            var promisifyStore = ['add', 'get', 'put', 'delete', 'getAll'].reduce(function (obj, key) {
-                if (typeof store[key] === 'function') {
-                    obj[key] = function () {
-                        return promisify(store[key].apply(store, arguments));
-                    };
-                }
-                return obj;
-            }, {});
-
-            resolve(promisifyStore);
-        };
-    });
-}
-
-function deleteStore() {
-    try {
-        indexedDB.deleteDatabase(DB_NAME);
-    } catch (e) {}
-}
-
-function promisify(request) {
-    return new _promise2.default(function (resolve, reject) {
-        request.onsuccess = function (event) {
-            resolve(event.target.result);
-        };
-
-        request.onerror = function (event) {
-            reject(event);
-        };
-    });
-}
+var CHECK_LIST = exports.CHECK_LIST = ['indexedDB', 'indexedDB.getAll']; /**
+                                                                          * @file indexeddb index.js
+                                                                          * @author clark-t (clarktanglei@163.com)
+                                                                          */
 
 /***/ }),
-/* 178 */,
 /* 179 */,
 /* 180 */,
 /* 181 */,
@@ -7145,7 +7235,8 @@ function promisify(request) {
 /* 229 */,
 /* 230 */,
 /* 231 */,
-/* 232 */
+/* 232 */,
+/* 233 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7153,7 +7244,7 @@ function promisify(request) {
 
 var _base = __webpack_require__(117);
 
-var _demo = __webpack_require__(177);
+var _demo = __webpack_require__(178);
 
 var _demo2 = _interopRequireDefault(_demo);
 
