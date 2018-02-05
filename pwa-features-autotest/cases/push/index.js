@@ -7451,29 +7451,6 @@ exports.default = function (scope) {
                                                 switch (_context.prev = _context.next) {
                                                     case 0:
                                                         done = 0;
-                                                        _context.prev = 1;
-                                                        _context.next = 4;
-                                                        return pushManager.subscribe({
-                                                            userVisibleOnly: true,
-                                                            applicationServerKey: applicationServerKey
-                                                        });
-
-                                                    case 4:
-                                                        subscribe = _context.sent;
-
-                                                        done = 1;
-                                                        resolve();
-                                                        _context.next = 13;
-                                                        break;
-
-                                                    case 9:
-                                                        _context.prev = 9;
-                                                        _context.t0 = _context['catch'](1);
-
-                                                        reject();
-                                                        (0, _log.log)('Failed to subscribe the user: ', _context.t0);
-
-                                                    case 13:
 
                                                         setTimeout(function () {
                                                             if (!done) {
@@ -7481,13 +7458,34 @@ exports.default = function (scope) {
                                                                 resolve();
                                                             }
                                                         }, 5000);
+                                                        _context.prev = 2;
+                                                        _context.next = 5;
+                                                        return pushManager.subscribe({
+                                                            userVisibleOnly: true,
+                                                            applicationServerKey: applicationServerKey
+                                                        });
+
+                                                    case 5:
+                                                        subscribe = _context.sent;
+
+                                                        done = 1;
+                                                        resolve();
+                                                        _context.next = 14;
+                                                        break;
+
+                                                    case 10:
+                                                        _context.prev = 10;
+                                                        _context.t0 = _context['catch'](2);
+
+                                                        reject();
+                                                        (0, _log.log)('Failed to subscribe the user: ', _context.t0);
 
                                                     case 14:
                                                     case 'end':
                                                         return _context.stop();
                                                 }
                                             }
-                                        }, _callee, _this, [[1, 9]]);
+                                        }, _callee, _this, [[2, 10]]);
                                     }));
 
                                     return function (_x, _x2) {
@@ -7508,43 +7506,6 @@ exports.default = function (scope) {
                                                 switch (_context2.prev = _context2.next) {
                                                     case 0:
                                                         done = 0;
-                                                        _context2.prev = 1;
-                                                        _context2.next = 4;
-                                                        return pushManager.getSubscription();
-
-                                                    case 4:
-                                                        getSubscribe = _context2.sent;
-                                                        _context2.next = 7;
-                                                        return (0, _helper.grade)('pushManager.getSubscription', 1);
-
-                                                    case 7:
-                                                        (0, _log.log)('- pushManager.getSubscription done -', 1);
-
-                                                        if (!getSubscribe) {
-                                                            _context2.next = 12;
-                                                            break;
-                                                        }
-
-                                                        _context2.next = 11;
-                                                        return (0, _helper.grade)('pushManager.subscribe', 1);
-
-                                                    case 11:
-                                                        (0, _log.log)('- pushManager.subscribe done -', 1);
-
-                                                    case 12:
-                                                        done = 1;
-                                                        resolve();
-                                                        _context2.next = 20;
-                                                        break;
-
-                                                    case 16:
-                                                        _context2.prev = 16;
-                                                        _context2.t0 = _context2['catch'](1);
-
-                                                        reject();
-                                                        (0, _log.log)('Failed to test getSubscription: ', _context2.t0);
-
-                                                    case 20:
 
                                                         setTimeout(function () {
                                                             if (!done) {
@@ -7552,13 +7513,48 @@ exports.default = function (scope) {
                                                                 resolve();
                                                             }
                                                         }, 5000);
+                                                        _context2.prev = 2;
+                                                        _context2.next = 5;
+                                                        return pushManager.getSubscription();
+
+                                                    case 5:
+                                                        getSubscribe = _context2.sent;
+                                                        _context2.next = 8;
+                                                        return (0, _helper.grade)('pushManager.getSubscription', 1);
+
+                                                    case 8:
+                                                        (0, _log.log)('- pushManager.getSubscription done -', 1);
+
+                                                        if (!getSubscribe) {
+                                                            _context2.next = 13;
+                                                            break;
+                                                        }
+
+                                                        _context2.next = 12;
+                                                        return (0, _helper.grade)('pushManager.subscribe', 1);
+
+                                                    case 12:
+                                                        (0, _log.log)('- pushManager.subscribe done -', 1);
+
+                                                    case 13:
+                                                        done = 1;
+                                                        resolve();
+                                                        _context2.next = 21;
+                                                        break;
+
+                                                    case 17:
+                                                        _context2.prev = 17;
+                                                        _context2.t0 = _context2['catch'](2);
+
+                                                        reject();
+                                                        (0, _log.log)('Failed to test getSubscription: ', _context2.t0);
 
                                                     case 21:
                                                     case 'end':
                                                         return _context2.stop();
                                                 }
                                             }
-                                        }, _callee2, _this, [[1, 16]]);
+                                        }, _callee2, _this, [[2, 17]]);
                                     }));
 
                                     return function (_x3, _x4) {
@@ -7642,7 +7638,7 @@ var vapidKeys = {
 };
 // log('vapidKeys:', vapidKeys);
 var applicationServerKey = void 0;
-// uc/qq can't pass urlB64ToUint8Array();
+// uc/qq(low version) can't pass urlB64ToUint8Array();
 try {
     applicationServerKey = urlB64ToUint8Array(vapidKeys.publicKey);
 } catch (err) {

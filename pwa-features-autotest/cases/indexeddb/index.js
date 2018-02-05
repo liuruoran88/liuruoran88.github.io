@@ -6982,7 +6982,7 @@ exports.default = function (scope) {
                                 // 主进程的 indexeddb 测试
 
                                 if (!(typeof indexedDB !== 'undefined')) {
-                                    _context.next = 76;
+                                    _context.next = 78;
                                     break;
                                 }
 
@@ -7116,48 +7116,50 @@ exports.default = function (scope) {
                             case 65:
                                 score = _context.sent;
 
+                                score = score === 0.5 ? 0.5 : 0;
                                 (0, _helper.grade)('indexedDB', score + indexeddbScore);
                                 (0, _log.log)('- indexedDB done -', score + indexeddbScore);
 
-                                _context.next = 70;
+                                _context.next = 71;
                                 return (0, _helper.getGrade)('indexedDB.getAll');
 
-                            case 70:
+                            case 71:
                                 getallScore = _context.sent;
 
+                                getallScore = getallScore === 0.5 ? 0.5 : 0;
                                 (0, _helper.grade)('indexedDB.getAll', getallScore + indexeddbGetallScore);
                                 (0, _log.log)('- indexeddb.getAll done -', getallScore + indexeddbGetallScore);
 
                                 (0, _log.log)('indexeddb-main: test-finished');
-                                _context.next = 77;
+                                _context.next = 79;
                                 break;
 
-                            case 76:
+                            case 78:
                                 (0, _log.log)('indexeddb-main: unsupport');
 
-                            case 77:
+                            case 79:
                                 if (navigator.serviceWorker) {
-                                    _context.next = 79;
+                                    _context.next = 81;
                                     break;
                                 }
 
                                 return _context.abrupt('return');
 
-                            case 79:
+                            case 81:
                                 (0, _log.log)('indexeddb-sw: register');
-                                _context.next = 82;
+                                _context.next = 84;
                                 return (0, _helper.register)(scope + 'sw-indexeddb.js', scope);
 
-                            case 82:
+                            case 84:
                                 reg = _context.sent;
-                                _context.next = 85;
+                                _context.next = 87;
                                 return (0, _helper.sleep)(5000);
 
-                            case 85:
+                            case 87:
 
                                 (0, _log.log)('indexeddb: test finish');
 
-                            case 86:
+                            case 88:
                             case 'end':
                                 return _context.stop();
                         }
