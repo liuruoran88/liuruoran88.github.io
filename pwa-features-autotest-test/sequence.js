@@ -745,11 +745,11 @@ module.exports = function (it) {
 
 exports.__esModule = true;
 
-var _iterator = __webpack_require__(96);
+var _iterator = __webpack_require__(98);
 
 var _iterator2 = _interopRequireDefault(_iterator);
 
-var _symbol = __webpack_require__(98);
+var _symbol = __webpack_require__(100);
 
 var _symbol2 = _interopRequireDefault(_symbol);
 
@@ -1236,12 +1236,18 @@ var uuidStore = exports.uuidStore = getLocalStore('uuid');
 /* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
+module.exports = { "default": __webpack_require__(92), __esModule: true };
+
+/***/ }),
+/* 61 */
+/***/ (function(module, exports, __webpack_require__) {
+
 "use strict";
 
 
 exports.__esModule = true;
 
-var _from = __webpack_require__(92);
+var _from = __webpack_require__(94);
 
 var _from2 = _interopRequireDefault(_from);
 
@@ -1260,7 +1266,7 @@ exports.default = function (arr) {
 };
 
 /***/ }),
-/* 61 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1318,7 +1324,7 @@ function random() {
 }
 
 /***/ }),
-/* 62 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1329,7 +1335,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.postMessageFromSW = exports.messageFromSWListener = exports.bindEvent = exports.one = exports.reload = exports.checkProperty = exports.checkProperties = exports.register = exports.init = undefined;
 
-var _toConsumableArray2 = __webpack_require__(60);
+var _getIterator2 = __webpack_require__(60);
+
+var _getIterator3 = _interopRequireDefault(_getIterator2);
+
+var _toConsumableArray2 = __webpack_require__(61);
 
 var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 
@@ -1653,70 +1663,70 @@ var bindEvent = exports.bindEvent = function () {
 
 
 var messageFromSWListener = exports.messageFromSWListener = function () {
-    var _ref14 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee15(sw) {
-        var _this5 = this;
+    var _ref15 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee16(sw) {
+        var _this6 = this;
 
-        return _regenerator2.default.wrap(function _callee15$(_context15) {
+        return _regenerator2.default.wrap(function _callee16$(_context16) {
             while (1) {
-                switch (_context15.prev = _context15.next) {
+                switch (_context16.prev = _context16.next) {
                     case 0:
-                        return _context15.abrupt('return', _promise2.default.race([bindEvent(window, 'error', function () {
-                            var _ref15 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee12(error) {
-                                return _regenerator2.default.wrap(function _callee12$(_context12) {
+                        return _context16.abrupt('return', _promise2.default.race([bindEvent(window, 'error', function () {
+                            var _ref16 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee13(error) {
+                                return _regenerator2.default.wrap(function _callee13$(_context13) {
                                     while (1) {
-                                        switch (_context12.prev = _context12.next) {
+                                        switch (_context13.prev = _context13.next) {
                                             case 0:
                                                 console.error(error);
 
                                             case 1:
                                             case 'end':
-                                                return _context12.stop();
-                                        }
-                                    }
-                                }, _callee12, _this5);
-                            }));
-
-                            return function (_x24) {
-                                return _ref15.apply(this, arguments);
-                            };
-                        }()), bindEvent(window, 'message', function () {
-                            var _ref16 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee13(event) {
-                                var data;
-                                return _regenerator2.default.wrap(function _callee13$(_context13) {
-                                    while (1) {
-                                        switch (_context13.prev = _context13.next) {
-                                            case 0:
-                                                console.warn('Got message via window', event.data);
-                                                data = event.data || {};
-
-                                                if (!data.feature) {
-                                                    _context13.next = 5;
-                                                    break;
-                                                }
-
-                                                _context13.next = 5;
-                                                return grade(data.feature, data.score || 0);
-
-                                            case 5:
-                                            case 'end':
                                                 return _context13.stop();
                                         }
                                     }
-                                }, _callee13, _this5);
+                                }, _callee13, _this6);
                             }));
 
-                            return function (_x25) {
+                            return function (_x26) {
                                 return _ref16.apply(this, arguments);
                             };
-                        }()), bindEvent(navigator.serviceWorker, 'message', function () {
+                        }()), bindEvent(window, 'message', function () {
                             var _ref17 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee14(event) {
                                 var data;
                                 return _regenerator2.default.wrap(function _callee14$(_context14) {
                                     while (1) {
                                         switch (_context14.prev = _context14.next) {
                                             case 0:
+                                                console.warn('Got message via window', event.data);
+                                                data = event.data || {};
+
+                                                if (!data.feature) {
+                                                    _context14.next = 5;
+                                                    break;
+                                                }
+
+                                                _context14.next = 5;
+                                                return grade(data.feature, data.score || 0);
+
+                                            case 5:
+                                            case 'end':
+                                                return _context14.stop();
+                                        }
+                                    }
+                                }, _callee14, _this6);
+                            }));
+
+                            return function (_x27) {
+                                return _ref17.apply(this, arguments);
+                            };
+                        }()), bindEvent(navigator.serviceWorker, 'message', function () {
+                            var _ref18 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee15(event) {
+                                var data;
+                                return _regenerator2.default.wrap(function _callee15$(_context15) {
+                                    while (1) {
+                                        switch (_context15.prev = _context15.next) {
+                                            case 0:
                                                 console.log('Got message via navigator.serviceWorker', event.data);
-                                                _context14.next = 3;
+                                                _context15.next = 3;
                                                 return grade('main-msg-got', 1);
 
                                             case 3:
@@ -1724,55 +1734,79 @@ var messageFromSWListener = exports.messageFromSWListener = function () {
                                                 data = event.data || {};
 
                                                 if (!data.feature) {
-                                                    _context14.next = 8;
+                                                    _context15.next = 8;
                                                     break;
                                                 }
 
-                                                _context14.next = 8;
+                                                _context15.next = 8;
                                                 return grade(data.feature, data.score || 0);
 
                                             case 8:
                                             case 'end':
-                                                return _context14.stop();
+                                                return _context15.stop();
                                         }
                                     }
-                                }, _callee14, _this5);
+                                }, _callee15, _this6);
                             }));
 
-                            return function (_x26) {
-                                return _ref17.apply(this, arguments);
+                            return function (_x28) {
+                                return _ref18.apply(this, arguments);
                             };
                         }())]));
 
                     case 1:
                     case 'end':
-                        return _context15.stop();
+                        return _context16.stop();
                 }
             }
-        }, _callee15, this);
+        }, _callee16, this);
     }));
 
-    return function messageFromSWListener(_x23) {
-        return _ref14.apply(this, arguments);
+    return function messageFromSWListener(_x25) {
+        return _ref15.apply(this, arguments);
     };
 }();
 
 var postMessageFromSW = exports.postMessageFromSW = function () {
-    var _ref18 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee16(sw, feature, score) {
-        return _regenerator2.default.wrap(function _callee16$(_context16) {
+    var _ref19 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee17(sw, feature, score) {
+        return _regenerator2.default.wrap(function _callee17$(_context17) {
             while (1) {
-                switch (_context16.prev = _context16.next) {
+                switch (_context17.prev = _context17.next) {
                     case 0:
-                        return _context16.abrupt('return', new _promise2.default(function (resolve, reject) {
+                        return _context17.abrupt('return', new _promise2.default(function (resolve, reject) {
                             var timer = setTimeout(function () {
                                 reject();
                             }, 2000);
+                            // console.log('????????????', sw, sw.ports);
 
                             if (sw && sw.clients && sw.clients.matchAll()) {
                                 self.clients.matchAll().then(function (clients) {
-                                    // for (const client of clients) {
-                                    clients[0].postMessage({ feature: feature, score: score });
-                                    // }
+                                    var _iteratorNormalCompletion = true;
+                                    var _didIteratorError = false;
+                                    var _iteratorError = undefined;
+
+                                    try {
+                                        for (var _iterator = (0, _getIterator3.default)(clients), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                                            var client = _step.value;
+
+                                            if (client && client.postMessage) {
+                                                client.postMessage({ feature: feature, score: score });
+                                            }
+                                        }
+                                    } catch (err) {
+                                        _didIteratorError = true;
+                                        _iteratorError = err;
+                                    } finally {
+                                        try {
+                                            if (!_iteratorNormalCompletion && _iterator.return) {
+                                                _iterator.return();
+                                            }
+                                        } finally {
+                                            if (_didIteratorError) {
+                                                throw _iteratorError;
+                                            }
+                                        }
+                                    }
                                 });
 
                                 clearTimeout(timer);
@@ -1785,14 +1819,14 @@ var postMessageFromSW = exports.postMessageFromSW = function () {
 
                     case 1:
                     case 'end':
-                        return _context16.stop();
+                        return _context17.stop();
                 }
             }
-        }, _callee16, this);
+        }, _callee17, this);
     }));
 
-    return function postMessageFromSW(_x27, _x28, _x29) {
-        return _ref18.apply(this, arguments);
+    return function postMessageFromSW(_x29, _x30, _x31) {
+        return _ref19.apply(this, arguments);
     };
 }();
 
@@ -1810,7 +1844,7 @@ exports.createStep = createStep;
 exports.isEmpty = isEmpty;
 exports.isObject = isObject;
 
-var _utils = __webpack_require__(61);
+var _utils = __webpack_require__(62);
 
 var _store = __webpack_require__(59);
 
@@ -1942,6 +1976,8 @@ function zero(list) {
 }
 
 function grade(feature, score) {
+    var _this4 = this;
+
     try {
         if (typeof parent !== 'undefined' && parent.schedulePerCase) {
             parent.schedulePerCase({
@@ -1953,7 +1989,36 @@ function grade(feature, score) {
         console.log(e);
     }
 
-    return _store.featureStore.setItem(feature, score);
+    return new _promise2.default(function () {
+        var _ref12 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee11(resolve, reject) {
+            var timer;
+            return _regenerator2.default.wrap(function _callee11$(_context11) {
+                while (1) {
+                    switch (_context11.prev = _context11.next) {
+                        case 0:
+                            timer = setTimeout(function () {
+                                reject();
+                            }, 2000);
+                            _context11.next = 3;
+                            return _store.featureStore.setItem(feature, score);
+
+                        case 3:
+                            resolve();
+
+                        case 4:
+                        case 'end':
+                            return _context11.stop();
+                    }
+                }
+            }, _callee11, _this4);
+        }));
+
+        return function (_x21, _x22) {
+            return _ref12.apply(this, arguments);
+        };
+    }());
+
+    // return featureStore.setItem(feature, score);
 }
 
 function gradeSw(sw, feature, score) {
@@ -1968,23 +2033,30 @@ function gradeSw(sw, feature, score) {
         console.log(e);
     }
 
-    if (_store.featureStore && _store.featureStore.setItem) {
-        return _store.featureStore.setItem(feature, score);
-    } else {
-        postMessageFromSW(sw, feature, score);
-    }
+    // if (featureStore && featureStore.setItem) {
+    //     return new Promise(async (resolve, reject) => {
+    //         let timer = setTimeout(() => {
+    //             reject();
+    //         }, 2000);
+
+    //         await featureStore.setItem(feature, score);
+    //         resolve();
+    //     });
+    //     // return featureStore.setItem(feature, score);
+    // }
+    postMessageFromSW(sw, feature, score);
 }
 
 function getGrade(feature) {
     return _store.featureStore.getItem(feature);
 }
 
-function createStep(_ref12) {
-    var _this4 = this;
+function createStep(_ref13) {
+    var _this5 = this;
 
-    var name = _ref12.name,
-        _ref12$prefix = _ref12.prefix,
-        prefix = _ref12$prefix === undefined ? 'pwa-features-autotest-step-' : _ref12$prefix;
+    var name = _ref13.name,
+        _ref13$prefix = _ref13.prefix,
+        prefix = _ref13$prefix === undefined ? 'pwa-features-autotest-step-' : _ref13$prefix;
 
     var key = prefix + name;
 
@@ -1992,20 +2064,20 @@ function createStep(_ref12) {
     var target = +localStorage.getItem(key);
 
     var step = function () {
-        var _ref13 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee11(fn) {
+        var _ref14 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee12(fn) {
             var needReload = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
-            return _regenerator2.default.wrap(function _callee11$(_context11) {
+            return _regenerator2.default.wrap(function _callee12$(_context12) {
                 while (1) {
-                    switch (_context11.prev = _context11.next) {
+                    switch (_context12.prev = _context12.next) {
                         case 0:
                             stepNumber++;
 
                             if (!(target === stepNumber)) {
-                                _context11.next = 9;
+                                _context12.next = 9;
                                 break;
                             }
 
-                            _context11.next = 4;
+                            _context12.next = 4;
                             return fn();
 
                         case 4:
@@ -2014,23 +2086,23 @@ function createStep(_ref12) {
                             localStorage.setItem(key, target);
 
                             if (!needReload) {
-                                _context11.next = 9;
+                                _context12.next = 9;
                                 break;
                             }
 
-                            _context11.next = 9;
+                            _context12.next = 9;
                             return reload();
 
                         case 9:
                         case 'end':
-                            return _context11.stop();
+                            return _context12.stop();
                     }
                 }
-            }, _callee11, _this4);
+            }, _callee12, _this5);
         }));
 
-        return function step(_x21) {
-            return _ref13.apply(this, arguments);
+        return function step(_x23) {
+            return _ref14.apply(this, arguments);
         };
     }();
 
@@ -2070,7 +2142,7 @@ function isObject(obj) {
 }
 
 /***/ }),
-/* 63 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2080,7 +2152,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _stringify = __webpack_require__(65);
+var _stringify = __webpack_require__(66);
 
 var _stringify2 = _interopRequireDefault(_stringify);
 
@@ -2088,7 +2160,7 @@ var _typeof2 = __webpack_require__(41);
 
 var _typeof3 = _interopRequireDefault(_typeof2);
 
-var _toConsumableArray2 = __webpack_require__(60);
+var _toConsumableArray2 = __webpack_require__(61);
 
 var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 
@@ -2096,7 +2168,7 @@ var _regenerator = __webpack_require__(24);
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
 
-var _slicedToArray2 = __webpack_require__(66);
+var _slicedToArray2 = __webpack_require__(67);
 
 var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
 
@@ -2224,7 +2296,7 @@ var init = function () {
 
 exports.log = log;
 
-var _utils = __webpack_require__(61);
+var _utils = __webpack_require__(62);
 
 var _store = __webpack_require__(59);
 
@@ -2317,7 +2389,7 @@ function log() {
 }
 
 /***/ }),
-/* 64 */
+/* 65 */
 /***/ (function(module, exports) {
 
 var g;
@@ -2344,13 +2416,13 @@ module.exports = g;
 
 
 /***/ }),
-/* 65 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = { "default": __webpack_require__(68), __esModule: true };
 
 /***/ }),
-/* 66 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2358,11 +2430,11 @@ module.exports = { "default": __webpack_require__(68), __esModule: true };
 
 exports.__esModule = true;
 
-var _isIterable2 = __webpack_require__(108);
+var _isIterable2 = __webpack_require__(110);
 
 var _isIterable3 = _interopRequireDefault(_isIterable2);
 
-var _getIterator2 = __webpack_require__(67);
+var _getIterator2 = __webpack_require__(60);
 
 var _getIterator3 = _interopRequireDefault(_getIterator2);
 
@@ -2405,12 +2477,6 @@ exports.default = function () {
     }
   };
 }();
-
-/***/ }),
-/* 67 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = { "default": __webpack_require__(111), __esModule: true };
 
 /***/ }),
 /* 68 */
@@ -6343,25 +6409,47 @@ module.exports = localforage_js;
 
 },{"3":3}]},{},[4])(4)
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(65)))
 
 /***/ }),
 /* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = { "default": __webpack_require__(93), __esModule: true };
+__webpack_require__(22);
+__webpack_require__(13);
+module.exports = __webpack_require__(93);
+
 
 /***/ }),
 /* 93 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(13);
-__webpack_require__(94);
-module.exports = __webpack_require__(1).Array.from;
+var anObject = __webpack_require__(3);
+var get = __webpack_require__(35);
+module.exports = __webpack_require__(1).getIterator = function (it) {
+  var iterFn = get(it);
+  if (typeof iterFn != 'function') throw TypeError(it + ' is not iterable!');
+  return anObject(iterFn.call(it));
+};
 
 
 /***/ }),
 /* 94 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__(95), __esModule: true };
+
+/***/ }),
+/* 95 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(13);
+__webpack_require__(96);
+module.exports = __webpack_require__(1).Array.from;
+
+
+/***/ }),
+/* 96 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6372,7 +6460,7 @@ var toObject = __webpack_require__(40);
 var call = __webpack_require__(50);
 var isArrayIter = __webpack_require__(51);
 var toLength = __webpack_require__(30);
-var createProperty = __webpack_require__(95);
+var createProperty = __webpack_require__(97);
 var getIterFn = __webpack_require__(35);
 
 $export($export.S + $export.F * !__webpack_require__(56)(function (iter) { Array.from(iter); }), 'Array', {
@@ -6405,7 +6493,7 @@ $export($export.S + $export.F * !__webpack_require__(56)(function (iter) { Array
 
 
 /***/ }),
-/* 95 */
+/* 97 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6420,21 +6508,6 @@ module.exports = function (object, index, value) {
 
 
 /***/ }),
-/* 96 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = { "default": __webpack_require__(97), __esModule: true };
-
-/***/ }),
-/* 97 */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(13);
-__webpack_require__(22);
-module.exports = __webpack_require__(37).f('iterator');
-
-
-/***/ }),
 /* 98 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -6444,15 +6517,30 @@ module.exports = { "default": __webpack_require__(99), __esModule: true };
 /* 99 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(100);
-__webpack_require__(43);
-__webpack_require__(106);
-__webpack_require__(107);
-module.exports = __webpack_require__(1).Symbol;
+__webpack_require__(13);
+__webpack_require__(22);
+module.exports = __webpack_require__(37).f('iterator');
 
 
 /***/ }),
 /* 100 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__(101), __esModule: true };
+
+/***/ }),
+/* 101 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(102);
+__webpack_require__(43);
+__webpack_require__(108);
+__webpack_require__(109);
+module.exports = __webpack_require__(1).Symbol;
+
+
+/***/ }),
+/* 102 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6463,7 +6551,7 @@ var has = __webpack_require__(8);
 var DESCRIPTORS = __webpack_require__(7);
 var $export = __webpack_require__(9);
 var redefine = __webpack_require__(46);
-var META = __webpack_require__(101).KEY;
+var META = __webpack_require__(103).KEY;
 var $fails = __webpack_require__(17);
 var shared = __webpack_require__(32);
 var setToStringTag = __webpack_require__(21);
@@ -6471,16 +6559,16 @@ var uid = __webpack_require__(20);
 var wks = __webpack_require__(0);
 var wksExt = __webpack_require__(37);
 var wksDefine = __webpack_require__(38);
-var enumKeys = __webpack_require__(102);
-var isArray = __webpack_require__(103);
+var enumKeys = __webpack_require__(104);
+var isArray = __webpack_require__(105);
 var anObject = __webpack_require__(3);
 var isObject = __webpack_require__(6);
 var toIObject = __webpack_require__(11);
 var toPrimitive = __webpack_require__(29);
 var createDesc = __webpack_require__(15);
 var _create = __webpack_require__(47);
-var gOPNExt = __webpack_require__(104);
-var $GOPD = __webpack_require__(105);
+var gOPNExt = __webpack_require__(106);
+var $GOPD = __webpack_require__(107);
 var $DP = __webpack_require__(4);
 var $keys = __webpack_require__(23);
 var gOPD = $GOPD.f;
@@ -6693,7 +6781,7 @@ setToStringTag(global.JSON, 'JSON', true);
 
 
 /***/ }),
-/* 101 */
+/* 103 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var META = __webpack_require__(20)('meta');
@@ -6752,7 +6840,7 @@ var meta = module.exports = {
 
 
 /***/ }),
-/* 102 */
+/* 104 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // all enumerable object keys, includes symbols
@@ -6773,7 +6861,7 @@ module.exports = function (it) {
 
 
 /***/ }),
-/* 103 */
+/* 105 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 7.2.2 IsArray(argument)
@@ -6784,7 +6872,7 @@ module.exports = Array.isArray || function isArray(arg) {
 
 
 /***/ }),
-/* 104 */
+/* 106 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
@@ -6809,7 +6897,7 @@ module.exports.f = function getOwnPropertyNames(it) {
 
 
 /***/ }),
-/* 105 */
+/* 107 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var pIE = __webpack_require__(39);
@@ -6831,49 +6919,24 @@ exports.f = __webpack_require__(7) ? gOPD : function getOwnPropertyDescriptor(O,
 
 
 /***/ }),
-/* 106 */
+/* 108 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(38)('asyncIterator');
 
 
 /***/ }),
-/* 107 */
+/* 109 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(38)('observable');
 
 
 /***/ }),
-/* 108 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = { "default": __webpack_require__(109), __esModule: true };
-
-/***/ }),
-/* 109 */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(22);
-__webpack_require__(13);
-module.exports = __webpack_require__(110);
-
-
-/***/ }),
 /* 110 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var classof = __webpack_require__(34);
-var ITERATOR = __webpack_require__(0)('iterator');
-var Iterators = __webpack_require__(10);
-module.exports = __webpack_require__(1).isIterable = function (it) {
-  var O = Object(it);
-  return O[ITERATOR] !== undefined
-    || '@@iterator' in O
-    // eslint-disable-next-line no-prototype-builtins
-    || Iterators.hasOwnProperty(classof(O));
-};
-
+module.exports = { "default": __webpack_require__(111), __esModule: true };
 
 /***/ }),
 /* 111 */
@@ -6888,12 +6951,15 @@ module.exports = __webpack_require__(112);
 /* 112 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var anObject = __webpack_require__(3);
-var get = __webpack_require__(35);
-module.exports = __webpack_require__(1).getIterator = function (it) {
-  var iterFn = get(it);
-  if (typeof iterFn != 'function') throw TypeError(it + ' is not iterable!');
-  return anObject(iterFn.call(it));
+var classof = __webpack_require__(34);
+var ITERATOR = __webpack_require__(0)('iterator');
+var Iterators = __webpack_require__(10);
+module.exports = __webpack_require__(1).isIterable = function (it) {
+  var O = Object(it);
+  return O[ITERATOR] !== undefined
+    || '@@iterator' in O
+    // eslint-disable-next-line no-prototype-builtins
+    || Iterators.hasOwnProperty(classof(O));
 };
 
 
@@ -11821,9 +11887,9 @@ exports.default = function (scope) {
     };
 };
 
-var _helper = __webpack_require__(62);
+var _helper = __webpack_require__(63);
 
-var _log = __webpack_require__(63);
+var _log = __webpack_require__(64);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -11923,9 +11989,9 @@ exports.default = function (scope) {
     };
 };
 
-var _helper = __webpack_require__(62);
+var _helper = __webpack_require__(63);
 
-var _log = __webpack_require__(63);
+var _log = __webpack_require__(64);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -11991,9 +12057,9 @@ exports.default = function (scope) {
     };
 };
 
-var _helper = __webpack_require__(62);
+var _helper = __webpack_require__(63);
 
-var _log = __webpack_require__(63);
+var _log = __webpack_require__(64);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -12259,9 +12325,9 @@ exports.default = function (scope) {
     };
 };
 
-var _helper = __webpack_require__(62);
+var _helper = __webpack_require__(63);
 
-var _log = __webpack_require__(63);
+var _log = __webpack_require__(64);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -12401,9 +12467,9 @@ exports.default = function (scope) {
 
 __webpack_require__(149);
 
-var _helper = __webpack_require__(62);
+var _helper = __webpack_require__(63);
 
-var _log = __webpack_require__(63);
+var _log = __webpack_require__(64);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -12433,7 +12499,7 @@ var _promise = __webpack_require__(42);
 
 var _promise2 = _interopRequireDefault(_promise);
 
-var _slicedToArray2 = __webpack_require__(66);
+var _slicedToArray2 = __webpack_require__(67);
 
 var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
 
@@ -12611,9 +12677,9 @@ exports.default = function (scope) {
     };
 };
 
-var _helper = __webpack_require__(62);
+var _helper = __webpack_require__(63);
 
-var _log = __webpack_require__(63);
+var _log = __webpack_require__(64);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -12863,9 +12929,9 @@ exports.default = function (scope) {
     };
 };
 
-var _helper = __webpack_require__(62);
+var _helper = __webpack_require__(63);
 
-var _log = __webpack_require__(63);
+var _log = __webpack_require__(64);
 
 var _indexeddb = __webpack_require__(182);
 
@@ -13071,9 +13137,9 @@ __webpack_require__(149);
 
 var _store = __webpack_require__(59);
 
-var _helper = __webpack_require__(62);
+var _helper = __webpack_require__(63);
 
-var _log = __webpack_require__(63);
+var _log = __webpack_require__(64);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -13289,9 +13355,9 @@ exports.default = function (scope) {
 
 __webpack_require__(149);
 
-var _helper = __webpack_require__(62);
+var _helper = __webpack_require__(63);
 
-var _log = __webpack_require__(63);
+var _log = __webpack_require__(64);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -13427,9 +13493,9 @@ exports.default = function (scope) {
     };
 };
 
-var _helper = __webpack_require__(62);
+var _helper = __webpack_require__(63);
 
-var _log = __webpack_require__(63);
+var _log = __webpack_require__(64);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -13513,6 +13579,7 @@ var messageFromSWListener = function () {
                             ch = new MessageChannel();
                             ch.port1.onmessage = function () {
                                 var _ref2 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2(event) {
+                                    var data;
                                     return _regenerator2.default.wrap(function _callee2$(_context2) {
                                         while (1) {
                                             switch (_context2.prev = _context2.next) {
@@ -13523,9 +13590,17 @@ var messageFromSWListener = function () {
 
                                                 case 3:
                                                     (0, _log.log)('- main-msg-got done -', 0.8);
-                                                    // await store.put('feature', 'messageChannel.port1', 'main-msg-got-by')
+                                                    data = event.data || {};
 
-                                                case 4:
+                                                    if (!data.feature) {
+                                                        _context2.next = 8;
+                                                        break;
+                                                    }
+
+                                                    _context2.next = 8;
+                                                    return (0, _helper.grade)(data.feature, data.score || 0);
+
+                                                case 8:
                                                 case 'end':
                                                     return _context2.stop();
                                             }
@@ -13566,6 +13641,7 @@ var messageFromSWListener = function () {
                             };
                         }()), (0, _helper.one)(window, 'message', function () {
                             var _ref4 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee4(event) {
+                                var data;
                                 return _regenerator2.default.wrap(function _callee4$(_context4) {
                                     while (1) {
                                         switch (_context4.prev = _context4.next) {
@@ -13576,9 +13652,17 @@ var messageFromSWListener = function () {
 
                                             case 3:
                                                 (0, _log.log)('- main-msg-got done -', 0.5);
-                                                // await store.put('feature', 'window', 'main-msg-got-by')
+                                                data = event.data || {};
 
-                                            case 4:
+                                                if (!data.feature) {
+                                                    _context4.next = 8;
+                                                    break;
+                                                }
+
+                                                _context4.next = 8;
+                                                return (0, _helper.grade)(data.feature, data.score || 0);
+
+                                            case 8:
                                             case 'end':
                                                 return _context4.stop();
                                         }
@@ -13589,8 +13673,12 @@ var messageFromSWListener = function () {
                             return function (_x3) {
                                 return _ref4.apply(this, arguments);
                             };
-                        }()), (0, _helper.one)(navigator.serviceWorker, 'message', function () {
+                        }()
+                        // await store.put('feature', 'window', 'main-msg-got-by')
+
+                        ), (0, _helper.one)(navigator.serviceWorker, 'message', function () {
                             var _ref5 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee5(event) {
+                                var data;
                                 return _regenerator2.default.wrap(function _callee5$(_context5) {
                                     while (1) {
                                         switch (_context5.prev = _context5.next) {
@@ -13601,9 +13689,17 @@ var messageFromSWListener = function () {
 
                                             case 3:
                                                 (0, _log.log)('- main-msg-got done -', 1);
-                                                // await store.put('feature', 'navigator.serviceWorker', 'main-msg-got-by')
+                                                data = event.data || {};
 
-                                            case 4:
+                                                if (!data.feature) {
+                                                    _context5.next = 8;
+                                                    break;
+                                                }
+
+                                                _context5.next = 8;
+                                                return (0, _helper.grade)(data.feature, data.score || 0);
+
+                                            case 8:
                                             case 'end':
                                                 return _context5.stop();
                                         }
@@ -13614,7 +13710,9 @@ var messageFromSWListener = function () {
                             return function (_x4) {
                                 return _ref5.apply(this, arguments);
                             };
-                        }())]));
+                        }()
+                        // await store.put('feature', 'navigator.serviceWorker', 'main-msg-got-by')
+                        )]));
 
                     case 2:
                     case 'end':
@@ -13723,9 +13821,9 @@ exports.default = function (scope) {
     };
 };
 
-var _helper = __webpack_require__(62);
+var _helper = __webpack_require__(63);
 
-var _log = __webpack_require__(63);
+var _log = __webpack_require__(64);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -14049,9 +14147,9 @@ exports.default = function (scope) {
 
 __webpack_require__(149);
 
-var _helper = __webpack_require__(62);
+var _helper = __webpack_require__(63);
 
-var _log = __webpack_require__(63);
+var _log = __webpack_require__(64);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -14218,9 +14316,9 @@ exports.default = function (scope) {
     };
 };
 
-var _helper = __webpack_require__(62);
+var _helper = __webpack_require__(63);
 
-var _log = __webpack_require__(63);
+var _log = __webpack_require__(64);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -14305,7 +14403,7 @@ define(String.prototype, "padRight", "".padEnd);
 "pop,reverse,shift,keys,values,entries,indexOf,every,some,forEach,map,filter,find,findIndex,includes,join,slice,concat,push,splice,unshift,sort,lastIndexOf,reduce,reduceRight,copyWithin,fill".split(",").forEach(function (key) {
   [][key] && define(Array, key, Function.call.bind([][key]));
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(65)))
 
 /***/ }),
 /* 265 */
@@ -19543,7 +19641,7 @@ for (var collections = getKeys(DOMIterables), i = 0; i < collections.length; i++
   typeof self === "object" ? self : this
 );
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(64)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(65)))
 
 /***/ }),
 /* 463 */
@@ -19589,7 +19687,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _stringify = __webpack_require__(65);
+var _stringify = __webpack_require__(66);
 
 var _stringify2 = _interopRequireDefault(_stringify);
 
@@ -19682,7 +19780,7 @@ var _axios2 = _interopRequireDefault(_axios);
 
 var _store = __webpack_require__(59);
 
-var _helper = __webpack_require__(62);
+var _helper = __webpack_require__(63);
 
 var _featureList = __webpack_require__(263);
 
@@ -19802,7 +19900,6 @@ function refreshFeatureScore(list) {
                             rate = parseInt(totalTestDone / totalTestNum * 100, 10) + '%';
 
                             totalSchedule.innerHTML = rate;
-                            // totalSchedule.style.width = rate;
                             totalScore.innerHTML = parseInt(totalTestScore / totalTestNum * 100, 10);
                             if (totalTestNum === totalTestDone) {
                                 sendDataBtn.classList.remove('hide');
@@ -19823,11 +19920,10 @@ function refreshFeatureScore(list) {
 }
 
 function refreshScorePerFeature(feature, score) {
-    var midScore = totalTestScore + score;
-    var midDone = totalTestDone + 1;
+    var midScore = totalTestScore >= totalTestNum ? totalTestScore : totalTestScore + score;
+    var midDone = totalTestDone >= totalTestNum ? totalTestDone : totalTestDone + 1;
     var rate = parseInt(midDone / totalTestNum * 100, 10) + '%';
     totalSchedule.innerHTML = rate;
-    // totalSchedule.style.width = rate;
     totalScore.innerHTML = parseInt(midScore / totalTestNum * 100, 10);
 }
 
@@ -22129,7 +22225,7 @@ var _regenerator = __webpack_require__(24);
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
 
-var _toConsumableArray2 = __webpack_require__(60);
+var _toConsumableArray2 = __webpack_require__(61);
 
 var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 
@@ -22301,9 +22397,9 @@ __webpack_require__(264);
 
 var _common = __webpack_require__(466);
 
-var _helper = __webpack_require__(62);
+var _helper = __webpack_require__(63);
 
-var _log = __webpack_require__(63);
+var _log = __webpack_require__(64);
 
 var _featureList = __webpack_require__(263);
 
