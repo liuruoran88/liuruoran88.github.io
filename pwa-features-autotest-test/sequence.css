@@ -82,6 +82,14 @@ iframe {
   margin-bottom: 10px;
   border-bottom: solid 1px #999;
 }
+.wrapper .schedule .test-tip {
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+.wrapper .schedule .test-tip p {
+  margin: 0;
+  padding: 0;
+}
 .wrapper .schedule .all-case .case-part {
   font-size: 12px;
   display: inline-block;

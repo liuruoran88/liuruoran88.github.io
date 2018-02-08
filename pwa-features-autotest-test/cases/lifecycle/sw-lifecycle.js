@@ -2332,7 +2332,6 @@ var postMessageFromSW = exports.postMessageFromSW = function () {
                             var timer = setTimeout(function () {
                                 reject();
                             }, 2000);
-                            // console.log('????????????', sw, sw.ports);
 
                             if (sw && sw.clients && sw.clients.matchAll()) {
                                 self.clients.matchAll().then(function (clients) {

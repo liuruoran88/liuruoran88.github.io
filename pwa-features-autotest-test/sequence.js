@@ -1777,7 +1777,6 @@ var postMessageFromSW = exports.postMessageFromSW = function () {
                             var timer = setTimeout(function () {
                                 reject();
                             }, 2000);
-                            // console.log('????????????', sw, sw.ports);
 
                             if (sw && sw.clients && sw.clients.matchAll()) {
                                 self.clients.matchAll().then(function (clients) {
@@ -22221,6 +22220,10 @@ module.exports = __webpack_amd_options__;
 "use strict";
 
 
+var _promise = __webpack_require__(42);
+
+var _promise2 = _interopRequireDefault(_promise);
+
 var _regenerator = __webpack_require__(24);
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
@@ -22348,44 +22351,77 @@ var main = function () {
 }();
 
 var run = function () {
-    var _ref4 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee4(_ref5) {
+    var _ref4 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee5(_ref5) {
+        var _this2 = this;
+
         var name = _ref5.name,
             scope = _ref5.scope,
             features = _ref5.features,
             main = _ref5.main,
             error = _ref5.error;
-        return _regenerator2.default.wrap(function _callee4$(_context5) {
+        return _regenerator2.default.wrap(function _callee5$(_context6) {
             while (1) {
-                switch (_context5.prev = _context5.next) {
+                switch (_context6.prev = _context6.next) {
                     case 0:
-                        _context5.prev = 0;
-                        _context5.next = 3;
-                        return main();
+                        return _context6.abrupt('return', new _promise2.default(function () {
+                            var _ref6 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee4(resolve, reject) {
+                                var timer;
+                                return _regenerator2.default.wrap(function _callee4$(_context5) {
+                                    while (1) {
+                                        switch (_context5.prev = _context5.next) {
+                                            case 0:
+                                                timer = setTimeout(function () {
+                                                    console.log('---- main timeout -----', name);
+                                                    resolve();
+                                                }, 15000);
+                                                _context5.prev = 1;
+                                                _context5.next = 4;
+                                                return main();
 
-                    case 3:
-                        _context5.next = 11;
-                        break;
+                                            case 4:
+                                                clearTimeout(timer);
+                                                resolve();
+                                                _context5.next = 16;
+                                                break;
 
-                    case 5:
-                        _context5.prev = 5;
-                        _context5.t0 = _context5['catch'](0);
+                                            case 8:
+                                                _context5.prev = 8;
+                                                _context5.t0 = _context5['catch'](1);
 
-                        (0, _log.log)('main-error', _context5.t0);
+                                                (0, _log.log)('main-error', _context5.t0);
 
-                        if (!error) {
-                            _context5.next = 11;
-                            break;
-                        }
+                                                if (!error) {
+                                                    _context5.next = 14;
+                                                    break;
+                                                }
 
-                        _context5.next = 11;
-                        return error(_context5.t0);
+                                                _context5.next = 14;
+                                                return error(_context5.t0);
 
-                    case 11:
+                                            case 14:
+
+                                                clearTimeout(timer);
+                                                reject();
+
+                                            case 16:
+                                            case 'end':
+                                                return _context5.stop();
+                                        }
+                                    }
+                                }, _callee4, _this2, [[1, 8]]);
+                            }));
+
+                            return function (_x2, _x3) {
+                                return _ref6.apply(this, arguments);
+                            };
+                        }()));
+
+                    case 1:
                     case 'end':
-                        return _context5.stop();
+                        return _context6.stop();
                 }
             }
-        }, _callee4, this, [[0, 5]]);
+        }, _callee5, this);
     }));
 
     return function run(_x) {
