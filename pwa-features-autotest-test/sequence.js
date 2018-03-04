@@ -19972,7 +19972,7 @@ function sendDataBtnBind() {
                 while (1) {
                     switch (_context4.prev = _context4.next) {
                         case 0:
-                            sendDataConfirm = confirm('send data to the database ?');
+                            sendDataConfirm = prompt('please input the password:', '');
 
                             if (!sendDataConfirm) {
                                 _context4.next = 6;
@@ -19984,6 +19984,7 @@ function sendDataBtnBind() {
                                 method: 'post',
                                 url: 'https://lavas.baidu.com/api/ready/statistic',
                                 data: {
+                                    password: sendDataConfirm,
                                     id: id,
                                     info: summary.info,
                                     feature: summary.feature
